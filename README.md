@@ -165,7 +165,7 @@ Baseline evidence lanes under `evidence/codex_hardening_v1/` and `evidence/grok_
 
 - **Phone** runs the Goal-0 service and captures operational receipts.
 - **Debian node** (this repo) holds both executors, policies, and verification tooling.
-- **Promotion** requires a verifier pass — executor receipts are claims of governed execution, not proof of correctness, merge, or deployment.
+- **Promotion** requires verifier pass plus operator review — see [promotion checklist](docs/operators.md#promotion-checklist). Executor receipts are claims of governed execution, not proof of correctness, merge, or deployment.
 
 ## Documentation
 
@@ -173,7 +173,7 @@ Baseline evidence lanes under `evidence/codex_hardening_v1/` and `evidence/grok_
 |---|---|
 | [docs/architecture.md](docs/architecture.md) | Dual-executor model, five layers, promotion rules |
 | [docs/bootstrap.md](docs/bootstrap.md) | Genesis bootstrap (`bootstrap/genesis.py`) |
-| [docs/operators.md](docs/operators.md) | Task workflow, executor selection, CLI reference |
+| [docs/operators.md](docs/operators.md) | Task workflow, verifier split, [promotion checklist](docs/operators.md#promotion-checklist) |
 | [docs/receipts.md](docs/receipts.md) | Receipt structure, lineage, verification tools |
 
 ## License
