@@ -119,7 +119,7 @@ Neither verifier alone proves correctness, merge safety, or deployment authoriza
 
 ## Promotion checklist
 
-Use this before treating a governed run as **promoted** (shared upstream, merged, deployed, or cited as proof).
+Use this before treating a governed run as **promoted** (shared upstream, merged, deployed, or cited as proof). Sections **C** and **D** are human gates — see [Completing C](#completing-c) and [Completing D](#completing-d) for step-by-step instructions and an [operator attestation](#operator-attestation-c--d) template.
 
 ### A. Node trust anchor (one-time / periodic)
 
@@ -155,12 +155,112 @@ Use this before treating a governed run as **promoted** (shared upstream, merged
 - [ ] Operator understands task `intended_effect` (read-only vs workspace-write)
 - [ ] Goal-0 phone authority recorded separately if promotion crosses device boundary
 
+#### Completing C
+
+C is a **human gate**. Verifier pass (B) checks intent hash binding cryptographically; C is your attestation that the right person approved the right task **before** run/seal.
+
+**1. Identify the receipt and task.** Open the receipt under promotion and read `evidence_paths.task` (or use the task path you passed to `seal`):
+
+```bash
+EVID=evidence/my_run          # directory containing receipt.json
+RECEIPT=$EVID/receipt.json
+TASK=$(python3 -c "import json; print(json.load(open('$RECEIPT'))['evidence_paths']['task'])")
+SEED=codex/bin/codex-seed     # or grok/bin/grok-seed — must match receipt schema family
+```
+
+**2. Confirm `operator_approval` on the task bundle.** All three fields must be present and non-empty:
+
+```bash
+python3 -c "import json; t=json.load(open('$TASK')); print(json.dumps(t['operator_approval'], indent=2))"
+python3 -c "import json; t=json.load(open('$TASK')); print('intended_effect:', t['policy']['intended_effect'])"
+```
+
+**3. Recompute and match `intent_hash`.** The value must equal both `operator_approval.intent_hash` in the task and `authority.operator_intent_hash` in the receipt:
+
+```bash
+$SEED intent-hash --task "$TASK"
+python3 -c "import json; r=json.load(open('$RECEIPT')); print('receipt intent:', r['authority']['operator_intent_hash'])"
+```
+
+If recompute ≠ task ≠ receipt → **Reject** (task edited after approval, or wrong task bound).
+
+**4. State `intended_effect` in plain language.** Before checking C, you should be able to answer:
+
+| `intended_effect` | Operator must understand |
+|---|---|
+| `read_only_report` | Recon / summarize only; no writes expected |
+| workspace-write (Codex) / non-read-only (Grok) | Files may change; git diff review required in D |
+
+**5. Goal-0 phone authority (when applicable).** If promotion means citing proof upstream, merging narrative off-node, or deploying: record authority on the **phone lane** separately. A node receipt does not substitute for Goal-0 operational receipts. Skip when attesting node-local health only.
+
+**C complete when** you can attest: approved identity, approval timestamp, intent hash match, understood sandbox/effect, and upstream agreement if the claim crosses the device boundary.
+
 ### D. Evidence review (beyond verify pass)
 
 - [ ] `execution_evidence.return_code` reviewed (0 ≠ success claim, only recorded rc)
 - [ ] Git diff in evidence reviewed if sandbox allowed writes (`git.diff_bytes` / `diff_sha256`)
 - [ ] No secret patterns in stdout/stderr (check `output_handling` if redaction ran)
 - [ ] Claims in stdout are scoped to observed evidence — receipt does not vouch for content truth
+
+#### Completing D
+
+D is a **human gate**. `verify --strict` proves artifact lineage and signature; D is your review of what the executor actually recorded.
+
+**1. Open execution evidence** from `evidence_paths.execution_evidence` in the receipt:
+
+```bash
+RUN=$(python3 -c "import json; print(json.load(open('$RECEIPT'))['evidence_paths']['execution_evidence'])")
+python3 -c "import json; e=json.load(open('$RUN')); print(json.dumps({k:e[k] for k in ('return_code','transport','git','output_handling')}, indent=2))"
+```
+
+**2. Review `return_code`.** `0` means the subprocess exited zero (or dry-run succeeded). It does **not** mean correct, merge-safe, or deployment-ready. Note `transport`:
+
+| `transport` | Meaning for promotion scope |
+|---|---|
+| `dry_run` | Pipeline smoke only — argv captured, CLI not executed |
+| `grok_cli` / live Codex | Executor ran; stdout content is in scope for D |
+
+**3. Review git / filesystem changes** when writes were allowed:
+
+```bash
+python3 -c "import json; g=json.load(open('$RUN'))['git']; print(json.dumps(g, indent=2))"
+```
+
+For read-only tasks expect `diff_bytes: 0`. If `diff_sha256` and `status_*` are null, the target may not be a git work tree — that does **not** prove no filesystem changes. For write lanes, inspect `diff_bytes`, `diff_sha256`, and `status_after` before promote.
+
+**4. Check secrets and redaction** via `output_handling`:
+
+```bash
+python3 -c "import json; print(json.dumps(json.load(open('$RUN'))['output_handling'], indent=2))"
+```
+
+Empty `*_secret_patterns` arrays mean policy regex did not match captured output. Manually scan stdout/stderr for tokens, keys, or PII the patterns may miss. If `output_redacted: true`, confirm redaction is acceptable for the promotion scope.
+
+**5. Scope claims in stdout.** Read the captured output (truncate for large blobs):
+
+```bash
+python3 -c "import json; s=json.load(open('$RUN')).get('stdout',''); print(s[:4000] if isinstance(s,str) else json.dumps(s)[:4000])"
+```
+
+Ask:
+
+- Are claims limited to observed evidence?
+- Does output respect `claim.boundary` on the receipt? (Executor receipts disclaim correctness, merge, deployment, and absence of defects.)
+
+**D complete when** you can attest: return code reviewed, git/diff acceptable for the sandbox, no unacceptable secrets, and stdout claims are scoped — not overstated beyond the receipt boundary.
+
+### Operator attestation (C + D)
+
+No formal attestation file is required in-repo. Record a short note in your operator log or Goal-0 journal before **Promote**:
+
+```text
+receipt: <receipt_id or path>
+C: approved_by=<id> approved_at=<iso8601> intent_hash=<sha256:...> matches; intended_effect=<...>; upstream=<yes|no|n/a>
+D: return_code=<n> transport=<...>; git diff_bytes=<n>; secrets=<none|redacted|hold>; claims scoped to evidence
+promote_scope: <what this promotion authorizes — e.g. baseline smoke / merge / deploy>
+```
+
+**Hold** if D is incomplete or `transport: dry_run` but you need a live-execution claim. **Reject** if C intent mismatch or policy was `deny`.
 
 ### E. Promotion gates (explicit non-goals)
 
