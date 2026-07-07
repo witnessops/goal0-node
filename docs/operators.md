@@ -177,7 +177,12 @@ Before citing goal0-node as healthy, all four baseline verifiers should pass:
 
 ```bash
 cd /home/ops/witnessops-node
+tools/baseline-regression.sh
+```
 
+Or run individually:
+
+```bash
 codex/bin/codex-seed verify --receipt evidence/codex_hardening_v1/receipt.json --strict
 grok/bin/grok-seed verify --receipt evidence/grok_hardening_v1/grok_task_summarize_repo_001.receipt.json --strict
 tools/wop-receipt-verify receipts/baseline/genesis_000.json \

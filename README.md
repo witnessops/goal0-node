@@ -57,6 +57,7 @@ goal0-node/
 ├── tools/                  # Control plane (signing, verification, launch)
 │   ├── wop_lib.py
 │   ├── wop-sign / wop-verify / wop-receipt-verify
+│   ├── baseline-regression.sh
 │   └── grok-governed-launch.sh
 ├── bootstrap/              # Consent-first genesis bootstrap
 │   └── genesis.py
