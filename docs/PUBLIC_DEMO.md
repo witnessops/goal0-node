@@ -1,7 +1,18 @@
 # Public demo boundaries
 
-**Classification:** `PUBLIC_DEMO_READY` (post hardening patch v1)  
-**Not:** full production launch-ready
+**Classification:** `GOAL0_NODE_PUBLICATION_INSPECTION_V1` = `PASS_FOR_PUBLIC_DEMO_GAPS`
+
+**Public status (exact wording):**
+
+```
+PUBLIC_DEMO_READY
+NOT_FULL_LAUNCH_READY
+NOT_PRODUCTION_AUTHORITY
+GITHUB_CI_OBSERVED_PASS_ON_05203ed
+LOCAL_REGRESSION_REPORTED_PASS
+```
+
+Update the CI tag when inspecting a newer commit (`gh run list -R witnessops/goal0-node --commit <sha>`).
 
 This repository is a **public architecture and reference demo** for WitnessOps governed execution on a Goal-0 node. Inspectors can read policies, verifiers, baseline evidence, and operator gates without access to private node keys or live runtime receipts.
 
@@ -75,6 +86,17 @@ Baseline operator attestations for `codex_hardening_v1` and `grok_hardening_v1` 
 ## Security
 
 See [SECURITY.md](../SECURITY.md). Report sensitive issues through private maintainer contact, not public issues.
+
+## Public proof exhibit (v1)
+
+| Artifact | Purpose |
+|---|---|
+| [public_demo/WALKTHROUGH.v1.md](public_demo/WALKTHROUGH.v1.md) | 10-minute inspect path from clean clone |
+| [public_demo/GOLDEN_VERIFY_TRANSCRIPT.v1.txt](public_demo/GOLDEN_VERIFY_TRANSCRIPT.v1.txt) | Expected pass output |
+| [public_demo/KNOWN_BAD_VERIFY_TRANSCRIPT.v1.txt](public_demo/KNOWN_BAD_VERIFY_TRANSCRIPT.v1.txt) | Tamper / overclaim failures |
+| [public_demo/CLAIM_MATRIX.v1.md](public_demo/CLAIM_MATRIX.v1.md) | What public proof can and cannot claim |
+
+**Lane:** `GOAL0_NODE_PUBLIC_DEMO_EVIDENCE_PROMOTION_V1` (docs-only; no signing key or live secret changes).
 
 ## Related docs
 

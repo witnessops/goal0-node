@@ -174,7 +174,9 @@ Baseline evidence lanes under `evidence/codex_hardening_v1/` and `evidence/grok_
 
 | Doc | Contents |
 |---|---|
-| [docs/PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) | Public demo boundaries, baseline verification, publication status |
+| [docs/PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) | Public demo boundaries, status tags, publication inspection |
+| [docs/public_demo/WALKTHROUGH.v1.md](docs/public_demo/WALKTHROUGH.v1.md) | Clean-clone verification walkthrough |
+| [docs/public_demo/CLAIM_MATRIX.v1.md](docs/public_demo/CLAIM_MATRIX.v1.md) | Public proof claim matrix |
 | [docs/architecture.md](docs/architecture.md) | Dual-executor model, five layers, promotion rules |
 | [docs/bootstrap.md](docs/bootstrap.md) | Genesis bootstrap (`bootstrap/genesis.py`) |
 | [docs/operators.md](docs/operators.md) | Task workflow, verifier split, [promotion checklist](docs/operators.md#promotion-checklist) |

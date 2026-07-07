@@ -1,0 +1,32 @@
+# Golden verification transcript (v1)
+# Lane: GOAL0_NODE_PUBLIC_DEMO_EVIDENCE_PROMOTION_V1
+# Purpose: reproducible public proof exhibit from clean repo copy
+# NOT a production authority claim
+
+repo: witnessops/goal0-node
+commit: 05203ed9b8593b2ea8e14eae15b980a677e69ed9 (or later with this file)
+environment: clean filesystem copy; python3 + verifier deps installed locally
+boundary: proves verifier commands exit 0 on published baselines — not correctness or deploy
+
+--- PUBLIC_BASELINE_MANIFEST ---
+$ sha256sum -c receipts/baseline/PUBLIC_BASELINE_MANIFEST.sha256
+receipts/baseline/genesis_000.json: OK
+identity/public/node_ed25519.pub.pem: OK
+identity/node_trust_anchor_manifest.v1.json: OK
+
+--- baseline-regression (operators.md checklist F) ---
+$ tools/baseline-regression.sh
+...
+summary: 4 passed, 0 failed
+baseline regression OK
+
+--- GitHub Actions (external observer) ---
+workflow: Baseline regression
+run: witnessops/goal0-node@05203ed — conclusion success (run id 28836739010)
+note: inspect Actions tab on target commit for independent CI evidence
+
+--- What this transcript does NOT prove ---
+- Executor output correctness
+- Merge safety or deployment authorization
+- Production readiness or public signing authority
+- Goal-0 phone runtime health

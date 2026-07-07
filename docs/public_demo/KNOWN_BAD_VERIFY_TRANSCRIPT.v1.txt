@@ -1,0 +1,29 @@
+# Known-bad verification transcript (v1)
+# Lane: GOAL0_NODE_PUBLIC_DEMO_EVIDENCE_PROMOTION_V1
+# Purpose: show verifier failure on tampered or mis-scoped input
+# NOT a vulnerability disclosure — pedagogy for public demo consumers
+
+repo: witnessops/goal0-node
+scenario: tampered public baseline manifest (single-byte drift)
+boundary: demonstrates fail-closed verification behavior
+
+--- Tampered manifest check ---
+$ printf "0000000000000000000000000000000000000000000000000000000000000000  receipts/baseline/genesis_000.json\n" > /tmp/bad_manifest.sha256
+$ sha256sum -c /tmp/bad_manifest.sha256
+receipts/baseline/genesis_000.json: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match
+
+--- Wrong verifier family (genesis receipt with executor verifier) ---
+$ codex/bin/codex-seed verify --receipt receipts/baseline/genesis_000.json --strict
+# decision: fail or partial — genesis schema is not vaultsovereign.codex.receipt.v1
+# Docs: do not cross verifier families (see docs/receipts.md#verifier-split)
+
+--- Overclaim example (dry_run promoted as live execution) ---
+receipt: evidence/codex_hardening_v1/receipt.json
+claim.transport: dry_run
+invalid_promote_scope: "live Codex executed and reported findings"
+correct_scope: "pipeline smoke / argv binding only"
+operator_action: Hold — see evidence/codex_hardening_v1/operator_attestation.v1.json
+
+--- Lesson ---
+Verifier pass is necessary but not sufficient for promotion. Human C+D gates and explicit promote_scope still apply.
