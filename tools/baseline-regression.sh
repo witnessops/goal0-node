@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${ROOT}"
 
 export WOPS_ROOT="${WOPS_ROOT:-${ROOT}}"
-export PATH="${HOME}/.grok/bin:${HOME}/.local/bin:${ROOT}/codex/bin:${ROOT}/grok/bin:/usr/bin:/bin"
+export PATH="${HOME}/.grok/bin:${HOME}/.local/bin:${ROOT}/codex/bin:${ROOT}/grok/bin:${PATH:-/usr/bin:/bin}"
 export PYTHONPATH="${ROOT}/tools:${ROOT}/codex/src:${ROOT}/grok/src${PYTHONPATH:+:${PYTHONPATH}}"
 PYTHON="${PYTHON:-python3}"
 
@@ -58,14 +58,14 @@ run_step "grok-seed verify --strict" \
     --strict
 
 run_step "wop-receipt-verify (genesis + sidecar + signature)" \
-  "${ROOT}/tools/wop-receipt-verify" "${GENESIS_RECEIPT}" \
+  "${PYTHON}" "${ROOT}/tools/wop-receipt-verify" "${GENESIS_RECEIPT}" \
     --sidecar "${GENESIS_SIDECAR}" \
     --require-schema witnessops.genesis_receipt.v1 \
     --verify-signature \
     --public-key "${NODE_PUB_KEY}"
 
 run_step "wop-verify (genesis signature)" \
-  "${ROOT}/tools/wop-verify" "${GENESIS_RECEIPT}" \
+  "${PYTHON}" "${ROOT}/tools/wop-verify" "${GENESIS_RECEIPT}" \
     --public-key "${NODE_PUB_KEY}"
 
 echo ""
