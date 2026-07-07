@@ -119,7 +119,14 @@ Neither verifier alone proves correctness, merge safety, or deployment authoriza
 
 ## Promotion checklist
 
-Use this before treating a governed run as **promoted** (shared upstream, merged, deployed, or cited as proof). Sections **C** and **D** are human gates — see [Completing C](#completing-c) and [Completing D](#completing-d) for step-by-step instructions and an [operator attestation](#operator-attestation-c--d) template.
+Use this before treating a governed run as **promoted** (shared upstream, merged, deployed, or cited as proof).
+
+| Section | Type | Instructions |
+|---|---|---|
+| **C** | Human gate | [Completing C](#completing-c) |
+| **D** | Human gate | [Completing D](#completing-d) |
+| **Attestation** | Record C+D | [Operator attestation](#operator-attestation-c--d) |
+| **Hold → Promote** | Decision | [Moving from Hold to Promote](#moving-from-hold-to-promote) |
 
 ### A. Node trust anchor (one-time / periodic)
 
@@ -251,16 +258,33 @@ Ask:
 
 ### Operator attestation (C + D)
 
-No formal attestation file is required in-repo. Record a short note in your operator log or Goal-0 journal before **Promote**:
+Record C+D before changing promotion outcome. Two options:
+
+**In-repo (recommended for baseline lanes):** `evidence/<lane>/operator_attestation.v1.json` plus SHA256 sidecar:
+
+```bash
+sha256sum evidence/<lane>/operator_attestation.v1.json \
+  > evidence/<lane>/operator_attestation.v1.json.sha256
+```
+
+Schema: `witnessops.operator_attestation.v1`. Examples:
+
+- `evidence/codex_hardening_v1/operator_attestation.v1.json`
+- `evidence/grok_hardening_v1/operator_attestation.v1.json`
+
+Required fields: `checklist.C_authority`, `checklist.D_evidence`, `promote_scope`, `promotion_outcome` (`hold` | `promote` | `reject`), `attestation_text`.
+
+**Operator log / Goal-0 journal (minimal):**
 
 ```text
 receipt: <receipt_id or path>
 C: approved_by=<id> approved_at=<iso8601> intent_hash=<sha256:...> matches; intended_effect=<...>; upstream=<yes|no|n/a>
 D: return_code=<n> transport=<...>; git diff_bytes=<n>; secrets=<none|redacted|hold>; claims scoped to evidence
 promote_scope: <what this promotion authorizes — e.g. baseline smoke / merge / deploy>
+promotion_outcome: hold | promote | reject
 ```
 
-**Hold** if D is incomplete or `transport: dry_run` but you need a live-execution claim. **Reject** if C intent mismatch or policy was `deny`.
+**Hold** if D is incomplete, E is open, upstream is partial, or `transport: dry_run` but you need a live-execution claim. **Reject** if C intent mismatch or policy was `deny`.
 
 ### E. Promotion gates (explicit non-goals)
 
@@ -296,6 +320,138 @@ tools/wop-verify receipts/baseline/genesis_000.json
 
 | Result | Meaning |
 |---|---|
-| **Promote** | All applicable A–E checks pass; upstream authority agrees |
-| **Hold** | Verifier pass but D or E incomplete |
+| **Promote** | All applicable A–E checks pass; upstream authority agrees; `promote_scope` matches evidence |
+| **Hold** | Verifiers and/or C+D pass, but E incomplete, upstream partial, or scope overstated |
 | **Reject** | Any strict verify fails, intent mismatch, or policy was `deny` |
+
+#### Moving from Hold to Promote
+
+**Promote is a recorded operator decision**, not an automatic verifier result. Completing C+D with `promotion_outcome: hold` means: attestation is done, but the claim is not yet authorized upstream.
+
+##### Prerequisites
+
+Before setting `promotion_outcome: promote` on an attestation:
+
+| Prerequisite | How to confirm |
+|---|---|
+| **A** trust anchor | Genesis + pubkey manifest + policy bundle (or `tools/baseline-regression.sh` for periodic smoke) |
+| **B** verifier pass | `*-seed verify --strict` exit 0 on the receipt under promotion |
+| **C** authority | [Completing C](#completing-c) — intent hash match, understood `intended_effect` |
+| **D** evidence | [Completing D](#completing-d) — rc, git, secrets, scoped stdout |
+| **E** gates | Applicable items in [E](#e-promotion-gates-explicit-non-goals) below |
+| **F** regression | `tools/baseline-regression.sh` when citing goal0-node health |
+| **Scope** | `promote_scope` matches what receipts prove (see scope table) |
+| **Upstream** | Sovereign agrees; Goal-0 recorded if claim crosses phone boundary |
+
+##### Step 1 — Name the promotion claim
+
+Pick one explicit claim. Do not Promote broader than evidence supports.
+
+| Tier | Example `promote_scope` | Typical evidence required |
+|---|---|---|
+| **Narrow** | Baseline lane attested + regression green | Tracked `evidence/*_hardening_v1` + F pass |
+| **Medium** | Node healthy for governed read-only work on `main` | Both baselines + E review + F + CI |
+| **Wide** | Production-ready / safe to deploy off-node | Live execution receipts + Goal-0 PASS + custody/WireGuard proof |
+
+##### Step 2 — Close E gates
+
+| E item | Action when promoting… |
+|---|---|
+| Code review / second executor | Material `main` changes → other executor reviews diff or attestation commits |
+| Tests or CI | Run `tools/baseline-regression.sh`; confirm GitHub Actions green on target commit |
+| Merge approval | Required if landing to `main`; skip if promoting already-merged HEAD |
+| Deployment authorization | Required only when `promote_scope` includes leaving the node |
+
+Record E completion in the attestation `promotion_outcome_reason` or operator log.
+
+##### Step 3 — Resolve upstream authority
+
+When promotion crosses the phone/device boundary or cites proof off-node:
+
+| Check | Hold blocker | Path to Promote |
+|---|---|---|
+| Goal-0 runtime | `partial_pass` (stale PIDs, health timeout) | Restore services; loopback PASS on configured ports |
+| WireGuard | `not_proven` | `wg show` handshake proof, or narrow `promote_scope` to exclude mesh |
+| Secret custody / UI / script safety | `not_proven` | Prove, or exclude from `promote_scope` |
+| Repo drift (e.g. goal0-console dirty) | local modifications | Commit, stash, or document irrelevance |
+
+For **node-local baseline only**, set `goal0_phone_authority: n/a` in the attestation and state that in `promotion_outcome_reason`.
+
+##### Step 4 — Match scope to transport
+
+| Lane evidence | Can Promote as… | Cannot Promote as… |
+|---|---|---|
+| `transport: dry_run` (codex baseline) | Pipeline smoke / verifier regression | Live Codex execution |
+| `transport: grok_cli` (grok baseline) | Governed read-only recon recorded | Correctness, merge safety, deploy, no-defects |
+| Live write lane | Material change with reviewed git diff | Without D review of `git.diff_bytes` |
+
+Need a live Codex execution claim → new `validate → render → run → seal → verify` **without** `--dry-run`, then new C+D attestation.
+
+##### Step 5 — Approval timing (optional hygiene)
+
+If `approved_at` post-dates sealed evidence (baseline backfill), either:
+
+- Accept: document `approval_timing: baseline_backfill_accepted` in attestation notes, or
+- Re-run pipeline with approval recorded **before** `run`/`seal`.
+
+##### Step 6 — Update attestation and sidecar
+
+Edit `evidence/<lane>/operator_attestation.v1.json`:
+
+```json
+{
+  "promotion_outcome": "promote",
+  "promotion_outcome_reason": "E review complete; upstream agrees; scope limited to <claim>",
+  "promote_scope": "<exact claim authorized>",
+  "checklist": {
+    "C_authority": { "goal0_phone_authority": "pass | partial | n/a" }
+  }
+}
+```
+
+Regenerate sidecar, commit, push:
+
+```bash
+cd /home/ops/witnessops-node
+sha256sum evidence/<lane>/operator_attestation.v1.json \
+  > evidence/<lane>/operator_attestation.v1.json.sha256
+git add evidence/<lane>/operator_attestation.v1.json*
+git commit -m "Promote operator attestation for <lane>"
+git push origin main
+```
+
+Confirm CI: Baseline regression workflow passes on the attestation commit.
+
+##### Step 7 — Sovereign sign-off
+
+Add to `attestation_text` or Goal-0 journal:
+
+```text
+upstream_authority: <identity> agrees promote_scope=<...> at <ISO8601>
+attestation_ids: attest_codex_hardening_v1_*, attest_grok_hardening_v1_*
+```
+
+Phone-bound promotion requires a Goal-0 operational receipt referencing these attestation IDs.
+
+##### Recommended narrow Promote (goal0-node baselines today)
+
+When both baseline lanes are attested and regression-green, the honest narrow claim is:
+
+```text
+promote_scope: Dual-executor baseline hardening lanes (codex dry-run smoke + grok read-only recon)
+               are verified, attested, and regression-green on main.
+```
+
+Minimum steps: E second-executor review of attestation/CI commits → update both `operator_attestation.v1.json` to `promote` → sovereign sign-off → push → CI green.
+
+Do **not** Promote production-ready, live Codex execution, or off-node deploy without additional evidence and upstream PASS.
+
+##### Hold → Promote cheat sheet
+
+| Situation | Outcome |
+|---|---|
+| Verifiers pass; C+D incomplete | **Hold** — finish [Completing C/D](#completing-c) |
+| C+D done; E or upstream open | **Hold** — finish E/upstream steps above |
+| C+D done; scope overstated (e.g. dry_run → live claim) | **Hold** — narrow scope or new run |
+| A–E applicable pass; scope explicit; sovereign agrees | **Promote** — update attestation |
+| Verifier fail or intent mismatch | **Reject** |
