@@ -17,8 +17,10 @@ identity/node_trust_anchor_manifest.v1.json: OK
 --- baseline-regression (operators.md checklist F) ---
 $ tools/baseline-regression.sh
 ...
+live RFC lookup_output: absent — skip (evidence/rfc_lookup_demo_v1/lookup_output.json)
 summary: 5 passed, 0 failed
 baseline regression OK
+# When evidence/rfc_lookup_demo_v1/lookup_output.json is tracked/present, expect a 6th verifier step.
 
 --- GitHub Actions (external observer) ---
 workflow: Baseline regression

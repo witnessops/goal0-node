@@ -21,6 +21,7 @@ GENESIS_RECEIPT="receipts/baseline/genesis_000.json"
 GENESIS_SIDECAR="receipts/baseline/genesis_000.json.sha256"
 NODE_PUB_KEY="${ROOT}/identity/public/node_ed25519.pub.pem"
 RFC_LOOKUP_GOLDEN="docs/public_demo/examples/rfc_lookup_output.golden.v1.json"
+RFC_LOOKUP_LIVE="evidence/rfc_lookup_demo_v1/lookup_output.json"
 
 failures=0
 passed=0
@@ -40,7 +41,12 @@ run_step() {
 }
 
 echo "baseline-regression: ${ROOT}"
-echo "running 5 baseline verifiers (operators.md checklist F + RFC lookup pre-live)"
+echo "baseline verifiers: checklist F (4) + RFC lookup pre-live golden (1)"
+if [[ -f "${RFC_LOOKUP_LIVE}" ]]; then
+  echo "live RFC lookup_output: present — will verify (${RFC_LOOKUP_LIVE})"
+else
+  echo "live RFC lookup_output: absent — skip (${RFC_LOOKUP_LIVE})"
+fi
 
 run_step "codex-seed verify --strict" \
   "${PYTHON}" -m codex_openai_seed.cli verify \
@@ -71,6 +77,11 @@ run_step "wop-verify (genesis signature)" \
 
 run_step "rfc-lookup-demo-verify (pre-live golden output)" \
   bash "${ROOT}/tools/rfc-lookup-demo-verify.sh" "${RFC_LOOKUP_GOLDEN}"
+
+if [[ -f "${RFC_LOOKUP_LIVE}" ]]; then
+  run_step "rfc-lookup-demo-verify (live lookup_output.json)" \
+    bash "${ROOT}/tools/rfc-lookup-demo-verify.sh" "${RFC_LOOKUP_LIVE}"
+fi
 
 echo ""
 echo "summary: ${passed} passed, ${failures} failed"
