@@ -1,0 +1,116 @@
+{
+  "schema": "witnessops.operator_attestation.v1",
+  "attestation_id": "attest_codex_hardening_v1_20260707",
+  "recorded_at": "2026-07-07T01:45:00Z",
+  "recorded_by": "sovereign",
+  "node_id": "debian-codex-node",
+  "evidence_lane": "evidence/codex_hardening_v1",
+  "receipt": {
+    "receipt_id": "rcpt_codex_7c36d0e73e6417dc",
+    "path": "evidence/codex_hardening_v1/receipt.json",
+    "task_path": "codex/tasks/examples/summarize_repo.json",
+    "task_id": "codex_task_summarize_repo_001"
+  },
+  "checklist": {
+    "C_authority": {
+      "status": "pass",
+      "operator_approval": {
+        "approved_by": "sovereign",
+        "approved_at": "2026-07-07T01:35:00Z",
+        "intent_hash": "sha256:55dadd39fe332fbdd59e82d94ec4d70d8b1da5436eb8961a6e762c9ab0b3ad6f"
+      },
+      "intent_hash_matches_receipt": true,
+      "intended_effect": "read_only_report",
+      "sandbox": "read-only",
+      "goal0_phone_authority": "partial",
+      "notes": [
+        "Cryptographic intent binding verified (codex-seed intent-hash + verify --strict).",
+        "approved_at post-dates sealed receipt/evidence (00:42:39Z) — documented as baseline backfill.",
+        "Goal-0 runtime PARTIAL_PASS at attestation time; upstream phone authority not fully proven."
+      ]
+    },
+    "D_evidence": {
+      "status": "pass",
+      "return_code": 0,
+      "transport": "dry_run",
+      "git": {
+        "diff_bytes": 0,
+        "diff_sha256": null
+      },
+      "secrets": "none",
+      "output_handling": {
+        "mode": "dry_run"
+      },
+      "stdout_scope": "argv capture only; Codex CLI was not executed",
+      "receipt_boundary_acknowledged": true,
+      "notes": [
+        "return_code 0 records dry-run success only, not correctness or merge safety.",
+        "No agent output; claims limited to pipeline smoke and bound argv."
+      ]
+    }
+  },
+  "promote_scope": "baseline pipeline smoke and verifier regression for codex_hardening_v1 only — not live Codex execution, not node-wide Promote, not deployment",
+  "promotion_outcome": "hold",
+  "promotion_outcome_reason": "C and D complete for this dry-run baseline lane; full Promote blocked pending Goal-0 runtime recovery, NOT_PROVEN custody/UI/WireGuard checks, and applicable E gates.",
+  "status_refresh": {
+    "recorded_at": "2026-07-07T01:45:00Z",
+    "receipt_sidecars": {
+      "self_index": "pass",
+      "quick_gap_receipts": "pass",
+      "summary": "Receipt sidecars verified OK for the self-index and quick-gap receipts."
+    },
+    "checks": {
+      "PHONE_TERMUX_OPERATOR_WORKSPACE": {
+        "result": "pass",
+        "detail": "confirmed local Termux phone workspace"
+      },
+      "goal0_runtime": {
+        "result": "partial_pass",
+        "detail": "pid files exist, but PIDs 13044 and 12995 are not running; loopback checks to 127.0.0.1:5174 and 127.0.0.1:4178/health timed out"
+      },
+      "repos": {
+        "result": "mixed",
+        "detail": "witnessops-codex-ops and witnessops-mesh clean; goal0-console has local modifications in 5 files"
+      },
+      "mesh_ip_reachability": {
+        "result": "pass",
+        "detail": "10.44.0.1 and 10.44.0.5 reachable by ping"
+      },
+      "wireguard_handshake": {
+        "result": "not_proven",
+        "detail": "wg show returned no interface data"
+      },
+      "secret_custody": {
+        "result": "not_proven"
+      },
+      "rendered_ui": {
+        "result": "not_proven"
+      },
+      "script_safety": {
+        "result": "not_proven"
+      },
+      "active_codex_goal": {
+        "result": "none"
+      },
+      "mutation_commands": {
+        "result": "none",
+        "detail": "no explicit mutation commands were run"
+      }
+    }
+  },
+  "command_list_policy": {
+    "summary": "Slash-style prompts are cockpit intents, not mutation authority",
+    "commands": [
+      { "command": "/status", "role": "bounded read-only status refresh" },
+      { "command": "/safe-next", "role": "classify safe vs blocked next lanes" },
+      { "command": "/receipt-status", "role": "verify receipt sidecars and summarize evidence" },
+      { "command": "/lane <intent>", "role": "turn intent into a scoped lane before apply work" },
+      { "command": "/triage", "role": "read-only incident triage" },
+      { "command": "/receipt <result>", "role": "create or validate a routed receipt" },
+      { "command": "/overclaim", "role": "find claims beyond current proof" },
+      { "command": "/facts", "role": "separate observed facts, inference, assumptions, gaps" },
+      { "command": "/stop", "role": "stop setup/hardening and focus on a named real goal" }
+    ]
+  },
+  "attestation_text": "receipt: rcpt_codex_7c36d0e73e6417dc (evidence/codex_hardening_v1/receipt.json)\nC: approved_by=sovereign approved_at=2026-07-07T01:35:00Z intent_hash=sha256:55dadd39fe332fbdd59e82d94ec4d70d8b1da5436eb8961a6e762c9ab0b3ad6f matches; intended_effect=read_only_report; upstream=partial (Goal-0 PARTIAL_PASS)\nD: return_code=0 transport=dry_run; git diff_bytes=0; secrets=none; stdout=argv capture only; claims within dry_run boundary\npromote_scope: baseline pipeline smoke — NOT live Codex execution"
+}
