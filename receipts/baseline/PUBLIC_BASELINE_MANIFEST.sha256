@@ -1,0 +1,3 @@
+350d7a309ed66c6fd608f3a179576133b3b9f0414301d3404150fde2a24c90a5  receipts/baseline/genesis_000.json
+f5a43b67765ef08ae47d85424fbd4cbe47a3ee4c6935a7e5207bd0aaf90649d5  identity/public/node_ed25519.pub.pem
+591bb7e54bee65e42aea13316309810324c596bc591d7894b229a64e97f8b1ef  identity/node_trust_anchor_manifest.v1.json

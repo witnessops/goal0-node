@@ -2,9 +2,9 @@
   "schema": "witnessops.node_trust_anchor_manifest.v1",
   "node_id": "debian-codex-node",
   "node_role": "debian-execution-node",
-  "repo": "VaultSovereign/goal0-node",
+  "repo": "witnessops/goal0-node",
   "created_at": "2026-07-06T22:34:58Z",
-  "updated_at": "2026-07-07T02:15:00Z",
+  "updated_at": "2026-07-07T02:30:00Z",
   "genesis": {
     "genesis_receipt_path": "receipts/baseline/genesis_000.json",
     "genesis_receipt_hash": "sha256:350d7a309ed66c6fd608f3a179576133b3b9f0414301d3404150fde2a24c90a5",
@@ -24,6 +24,7 @@
   "notes": [
     "Published manifest uses repo-relative paths for GitHub consumers.",
     "Private key remains on-node only (identity/private/ is gitignored).",
-    "Node-local governance receipts under receipts/<run_id>/ are not tracked."
+    "Node-local governance receipts under receipts/<run_id>/ are not tracked.",
+    "Repo relocated VaultSovereign/goal0-node -> witnessops/goal0-node; see receipts/baseline/TRUST_ANCHOR_PUBLIC_REPO_RELOCATION_V1.md."
   ]
 }

@@ -4,6 +4,8 @@ WitnessOps governed runtime node for Goal-0. Hosts two policy-gated coding execu
 
 Neither executor is a free agent. Both run through the same governed pipeline and produce signed receipts that a separate verifier must validate before claims are promoted.
 
+**Public demo:** This repository is a reference implementation for inspectable governed execution — not a production authority surface. See [SECURITY.md](SECURITY.md) and [docs/PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md).
+
 ## Architecture
 
 ```
@@ -172,10 +174,12 @@ Baseline evidence lanes under `evidence/codex_hardening_v1/` and `evidence/grok_
 
 | Doc | Contents |
 |---|---|
+| [docs/PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) | Public demo boundaries, baseline verification, publication status |
 | [docs/architecture.md](docs/architecture.md) | Dual-executor model, five layers, promotion rules |
 | [docs/bootstrap.md](docs/bootstrap.md) | Genesis bootstrap (`bootstrap/genesis.py`) |
 | [docs/operators.md](docs/operators.md) | Task workflow, verifier split, [promotion checklist](docs/operators.md#promotion-checklist) |
 | [docs/receipts.md](docs/receipts.md) | Receipt structure, lineage, verification tools |
+| [SECURITY.md](SECURITY.md) | Security policy and reporting boundaries |
 
 ## License
 

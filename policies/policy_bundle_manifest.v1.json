@@ -2,13 +2,13 @@
   "schema": "witnessops.policy_bundle_manifest.v1",
   "bundle_id": "goal0-dual-executor-policy-v1",
   "node_id": "debian-codex-node",
-  "source_repo": "VaultSovereign/goal0-node",
+  "source_repo": "witnessops/goal0-node",
   "source_seeds": [
     "codex/",
     "grok/"
   ],
   "created_at": "2026-07-06T22:38:55Z",
-  "updated_at": "2026-07-07T02:15:00Z",
+  "updated_at": "2026-07-07T02:30:00Z",
   "install_root": "/home/ops/witnessops-node/policies",
   "executors": [
     "codex",
