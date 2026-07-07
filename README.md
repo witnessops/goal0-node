@@ -58,6 +58,10 @@ goal0-node/
 │   ├── wop_lib.py
 │   ├── wop-sign / wop-verify / wop-receipt-verify
 │   └── grok-governed-launch.sh
+├── bootstrap/              # Consent-first genesis bootstrap
+│   └── genesis.py
+├── docs/                   # Shared architecture and operator docs
+├── seeds/                  # Seed artifacts (hashed at genesis)
 └── evidence/               # Baseline receipt lanes (not runtime noise)
     ├── codex_hardening_v1/
     └── grok_hardening_v1/
@@ -155,6 +159,15 @@ Baseline evidence lanes under `evidence/codex_hardening_v1/` and `evidence/grok_
 - **Phone** runs the Goal-0 service and captures operational receipts.
 - **Debian node** (this repo) holds both executors, policies, and verification tooling.
 - **Promotion** requires a verifier pass — executor receipts are claims of governed execution, not proof of correctness, merge, or deployment.
+
+## Documentation
+
+| Doc | Contents |
+|---|---|
+| [docs/architecture.md](docs/architecture.md) | Dual-executor model, five layers, promotion rules |
+| [docs/bootstrap.md](docs/bootstrap.md) | Genesis bootstrap (`bootstrap/genesis.py`) |
+| [docs/operators.md](docs/operators.md) | Task workflow, executor selection, CLI reference |
+| [docs/receipts.md](docs/receipts.md) | Receipt structure, lineage, verification tools |
 
 ## License
 
