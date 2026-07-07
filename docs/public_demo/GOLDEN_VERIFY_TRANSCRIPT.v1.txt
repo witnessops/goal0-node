@@ -17,7 +17,7 @@ identity/node_trust_anchor_manifest.v1.json: OK
 --- baseline-regression (operators.md checklist F) ---
 $ tools/baseline-regression.sh
 ...
-summary: 4 passed, 0 failed
+summary: 5 passed, 0 failed
 baseline regression OK
 
 --- GitHub Actions (external observer) ---

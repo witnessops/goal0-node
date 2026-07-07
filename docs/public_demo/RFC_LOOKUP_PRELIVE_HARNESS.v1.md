@@ -17,10 +17,10 @@ This lane is **docs + verifier only**. It does not record evidence, promote to b
 | `RFC_LOOKUP_DEMO_PUBLIC_DESIGN` | PASS (prior lane `e5509c3`) |
 | `TASK_SPECIMENS_PRESENT` | PASS |
 | `PRELIVE_HARNESS_SPEC` | PASS (this document) |
-| `PRELIVE_VERIFIER_CHECKLIST` | PASS (`tools/rfc-lookup-demo-verify.sh`) |
+| `PRELIVE_VERIFIER_CHECKLIST` | PASS (`tools/rfc-lookup-demo-verify.sh`; golden output in `baseline-regression.sh`) |
 | `LIVE_EVIDENCE_LANE` | **HOLD** |
 | `PUBLIC_PROMOTION` | **HOLD** |
-| `GITHUB_CI_EVIDENCE` | NOT_OBSERVED until evidence commit + workflow run |
+| `GITHUB_CI_EVIDENCE` (prelive verifier) | OBSERVED when Baseline regression green on commit wiring the step |
 
 ## Harness model
 
