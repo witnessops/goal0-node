@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/codex_execution_evidence.v1.json",
+  "title": "VaultSovereign Codex Execution Evidence v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "transport",
+    "return_code",
+    "stdout",
+    "stderr",
+    "started_at",
+    "finished_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.codex.execution_evidence.v1"
+    },
+    "transport": {
+      "enum": [
+        "dry_run",
+        "codex_cli"
+      ]
+    },
+    "return_code": {
+      "type": "integer"
+    }
+  }
+}

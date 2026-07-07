@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+WOPS_ROOT="/home/ops/witnessops-node"
+export PYTHONPATH="${WOPS_ROOT}/codex/src${PYTHONPATH:+:${PYTHONPATH}}"
+export PATH="${HOME}/.local/bin:${HOME}/.codex/bin:/usr/bin:/bin"
+cd "${WOPS_ROOT}"
+exec python3 -m codex_openai_seed.cli "$@"

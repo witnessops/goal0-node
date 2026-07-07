@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.bak
+*.pre_fix.bak
+.DS_Store
+
+# Node secrets and operator-private material
+identity/private/
+private/
+
+# Runtime evidence (baseline lanes are tracked explicitly)
+evidence/*
+!evidence/codex_hardening_v1/

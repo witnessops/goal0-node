@@ -1,0 +1,74 @@
+{
+  "schema": "vaultsovereign.codex.policy_verdict.v1",
+  "task_id": "codex_task_summarize_repo_001",
+  "policy_version": "codex_exec_policy.v1",
+  "decision": "allow",
+  "checked_at": "2026-07-07T00:42:39Z",
+  "checks": [
+    {
+      "id": "schema",
+      "result": "pass"
+    },
+    {
+      "id": "mode_codex_exec",
+      "result": "pass"
+    },
+    {
+      "id": "prompt_present",
+      "result": "pass"
+    },
+    {
+      "id": "prompt_size",
+      "result": "pass",
+      "detail": "chars=182 max=12000"
+    },
+    {
+      "id": "operator_approval_present",
+      "result": "pass"
+    },
+    {
+      "id": "operator_intent_bound",
+      "result": "pass",
+      "detail": "expected=sha256:55dadd39fe332fbdd59e82d94ec4d70d8b1da5436eb8961a6e762c9ab0b3ad6f"
+    },
+    {
+      "id": "sandbox_allowed",
+      "result": "pass"
+    },
+    {
+      "id": "approval_mode_allowed",
+      "result": "pass",
+      "detail": "ask_for_approval='never'"
+    },
+    {
+      "id": "dangerous_flags_absent",
+      "result": "pass",
+      "detail": "found=[]"
+    },
+    {
+      "id": "web_search_policy",
+      "result": "pass"
+    },
+    {
+      "id": "secrets_absent",
+      "result": "pass",
+      "detail": "matched_patterns=[]"
+    },
+    {
+      "id": "target_repo_path_shape",
+      "result": "pass"
+    },
+    {
+      "id": "target_repo_exists",
+      "result": "pass",
+      "detail": "path=/home/ops/witnessops-node/codex"
+    },
+    {
+      "id": "expected_root_markers_present",
+      "result": "pass",
+      "detail": "missing=[]"
+    }
+  ],
+  "task_hash": "sha256:26faeb9ee9bd86bc1fa8350327d1f3acefb2f20344d0dc24b32502d3e94b57c9",
+  "verdict_hash": "sha256:a01303a00f0ecd66e8632317744efc7f65e149b0a07c521c92006c95fcdeb696"
+}

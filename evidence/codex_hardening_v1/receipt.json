@@ -1,0 +1,40 @@
+{
+  "schema": "vaultsovereign.codex.receipt.v1",
+  "receipt_id": "rcpt_codex_7c36d0e73e6417dc",
+  "issued_at": "2026-07-07T00:42:39Z",
+  "claim": {
+    "type": "codex_task_policy_checked_and_execution_evidence_recorded",
+    "boundary": "This receipt does not prove correctness, merge, deployment, or absence of defects.",
+    "task_id": "codex_task_summarize_repo_001",
+    "transport": "dry_run",
+    "return_code": 0
+  },
+  "authority": {
+    "operator": "sovereign",
+    "operator_intent_hash": "sha256:55dadd39fe332fbdd59e82d94ec4d70d8b1da5436eb8961a6e762c9ab0b3ad6f",
+    "operator_intent_expected": "sha256:55dadd39fe332fbdd59e82d94ec4d70d8b1da5436eb8961a6e762c9ab0b3ad6f",
+    "policy_verdict_hash": "sha256:8d5280c3baa62dad80eed6d1ea85fa12eeef11ee2af6e1971017fe5eb1885951"
+  },
+  "evidence": {
+    "task_hash": "sha256:26faeb9ee9bd86bc1fa8350327d1f3acefb2f20344d0dc24b32502d3e94b57c9",
+    "policy_verdict_hash": "sha256:8d5280c3baa62dad80eed6d1ea85fa12eeef11ee2af6e1971017fe5eb1885951",
+    "run_plan_hash": "sha256:916f7d29df4161f34a38ecba2ea46a233c5013c89cceef7bd33d518c96481dc7",
+    "execution_evidence_hash": "sha256:7c36d0e73e6417dc6b55882f0644f2e0ac9ed90969b611fdf262b69feca53931"
+  },
+  "evidence_paths": {
+    "task": "codex/tasks/examples/summarize_repo.json",
+    "policy_verdict": "evidence/codex_hardening_v1/verdict.json",
+    "run_plan": "evidence/codex_hardening_v1/plan.json",
+    "execution_evidence": "evidence/codex_hardening_v1/evidence.json"
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "public_key_id": "debian-codex-node-ed25519-v1",
+    "public_key_path": "/home/ops/witnessops-node/identity/public/node_ed25519.pub.pem",
+    "public_key_pem": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO+JV9/MX/82xdiu2O3fsDYXY0ur/pzrnwBqJZY4n+f debian-codex-node-ed25519-v1\n",
+    "signature_encoding": "base64",
+    "signature": "+M5MAm/i9/gC0zy6Ow4wkLiuJKfwSENECZN5MDzG2IykNV1xgFtSidUArYpqv+JXWbnN2K9HVYMeBQHt4jdrAw==",
+    "signed_payload_hash": "sha256:78cab22f978334c2f75b07d2dfa6220ba4f030d544a106398fe03b8cc5730cbe"
+  },
+  "receipt_hash": "sha256:6a641dbed97044e18948d12936c96408d57c66f59fcbf5bc917891a9a52e21d3"
+}

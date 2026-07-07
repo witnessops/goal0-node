@@ -1,0 +1,41 @@
+{
+  "schema": "vaultsovereign.codex.execution_evidence.v1",
+  "task_id": "codex_task_summarize_repo_001",
+  "started_at": "2026-07-07T00:42:39Z",
+  "finished_at": "2026-07-07T00:42:39Z",
+  "transport": "dry_run",
+  "return_code": 0,
+  "stdout": {
+    "dry_run": true,
+    "argv": [
+      "codex",
+      "exec",
+      "--json",
+      "--ephemeral",
+      "--sandbox",
+      "read-only",
+      "--cd",
+      "/home/ops/witnessops-node/codex",
+      "--skip-git-repo-check",
+      "Summarize the codex-seed runtime layout, identify the top five risky areas, and do not modify files.\n\nContext:\nThis is a read-only reconnaissance task for the WitnessOps Codex governance pass.\n\nGovernance constraints:\n- Do not bypass sandboxing or approvals.\n- Do not print or persist secrets.\n- Keep claims scoped to observed evidence."
+    ],
+    "note": "Codex CLI was not executed."
+  },
+  "stderr": "",
+  "codex_binary": null,
+  "git": {
+    "repo": "/home/ops/witnessops-node/codex",
+    "head_before": null,
+    "head_after": null,
+    "status_before": null,
+    "status_after": null,
+    "diff_sha256": null,
+    "diff_bytes": 0
+  },
+  "plan_hash": "sha256:916f7d29df4161f34a38ecba2ea46a233c5013c89cceef7bd33d518c96481dc7",
+  "plan_body_hash": "sha256:78ff0c14d7a388011cbaa38f0ffc54fa2a3d791a34c0f25fce0ad46b5c3eed2c",
+  "output_handling": {
+    "mode": "dry_run"
+  },
+  "evidence_hash": "sha256:d671ecd476717d218aaf5ee3ed4e00b9b9c305e89b14d84aca9788510dada715"
+}

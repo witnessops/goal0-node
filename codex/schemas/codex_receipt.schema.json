@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/codex_receipt.v1.json",
+  "title": "VaultSovereign Codex Receipt v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "receipt_id",
+    "issued_at",
+    "claim",
+    "evidence",
+    "signature"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.codex.receipt.v1"
+    },
+    "receipt_id": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "object"
+    },
+    "signature": {
+      "type": "object"
+    }
+  }
+}

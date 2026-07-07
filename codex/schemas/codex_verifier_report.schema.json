@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/codex_verifier_report.v1.json",
+  "title": "VaultSovereign Codex Verifier Report v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "decision",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.codex.verifier_report.v1"
+    },
+    "decision": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial"
+      ]
+    },
+    "checks": {
+      "type": "array"
+    }
+  }
+}

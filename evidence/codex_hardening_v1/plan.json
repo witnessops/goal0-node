@@ -1,0 +1,40 @@
+{
+  "schema": "vaultsovereign.codex.run_plan.v1",
+  "task_id": "codex_task_summarize_repo_001",
+  "created_at": "2026-07-07T00:42:39Z",
+  "argv": [
+    "codex",
+    "exec",
+    "--json",
+    "--ephemeral",
+    "--sandbox",
+    "read-only",
+    "--cd",
+    "/home/ops/witnessops-node/codex",
+    "--skip-git-repo-check",
+    "Summarize the codex-seed runtime layout, identify the top five risky areas, and do not modify files.\n\nContext:\nThis is a read-only reconnaissance task for the WitnessOps Codex governance pass.\n\nGovernance constraints:\n- Do not bypass sandboxing or approvals.\n- Do not print or persist secrets.\n- Keep claims scoped to observed evidence."
+  ],
+  "guards": {
+    "deny_flags": [
+      "--dangerously-bypass-approvals-and-sandbox",
+      "--yolo",
+      "--dangerously-bypass-hook-trust"
+    ],
+    "sandbox": "read-only",
+    "require_json_output": true,
+    "require_ephemeral": true,
+    "forbid_web_search": true
+  },
+  "lineage": {
+    "task_path": "codex/tasks/examples/summarize_repo.json",
+    "policy_verdict_path": "evidence/codex_hardening_v1/verdict.json",
+    "task_hash": "sha256:26faeb9ee9bd86bc1fa8350327d1f3acefb2f20344d0dc24b32502d3e94b57c9",
+    "policy_verdict_hash": "sha256:8d5280c3baa62dad80eed6d1ea85fa12eeef11ee2af6e1971017fe5eb1885951"
+  },
+  "redactions": [
+    "No OpenAI API key or access token is persisted in the plan.",
+    "Prompt text is persisted by design; policy rejects common secret patterns before rendering."
+  ],
+  "claim_boundary": "Plan only: no Codex execution has occurred.",
+  "plan_hash": "sha256:78ff0c14d7a388011cbaa38f0ffc54fa2a3d791a34c0f25fce0ad46b5c3eed2c"
+}

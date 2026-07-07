@@ -1,0 +1,38 @@
+{
+  "schema": "vaultsovereign.codex.task_bundle.v1",
+  "task_id": "codex_task_security_review_001",
+  "target_repo": {
+    "name": "witnessops-node/codex",
+    "path": "/home/ops/witnessops-node/codex",
+    "remote": null,
+    "expected_root_markers": [
+      "bin/codex-seed",
+      "src/codex_openai_seed/policy.py"
+    ]
+  },
+  "prompt": {
+    "instruction": "Review the codex-seed runtime for security-sensitive entry points and summarize findings without modifying files.",
+    "context": "Read-only security review. Do not make claims of full coverage."
+  },
+  "execution": {
+    "mode": "codex_exec",
+    "sandbox": "read-only",
+    "ask_for_approval": "never",
+    "json": true,
+    "ephemeral": true,
+    "web_search": false,
+    "model": null,
+    "profile": null,
+    "timeout_seconds": 1200
+  },
+  "policy": {
+    "allow_web_search": false,
+    "allow_danger_full_access": false,
+    "intended_effect": "read_only_security_review"
+  },
+  "operator_approval": {
+    "approved_by": "sovereign",
+    "approved_at": "2026-07-07T01:35:00Z",
+    "intent_hash": "sha256:3e53c691e216207ebae99f5dd33f4ca40e585cafc92ee3b646782d0062b2a1c2"
+  }
+}

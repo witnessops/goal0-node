@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/codex_task_bundle.v1.json",
+  "title": "VaultSovereign Codex Task Bundle v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "target_repo",
+    "prompt",
+    "execution",
+    "policy",
+    "operator_approval"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.codex.task_bundle.v1"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "target_repo": {
+      "type": "object"
+    },
+    "prompt": {
+      "type": "object",
+      "required": [
+        "instruction"
+      ],
+      "properties": {
+        "instruction": {
+          "type": "string"
+        },
+        "context": {
+          "type": "string"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "mode",
+        "sandbox",
+        "ask_for_approval"
+      ],
+      "properties": {
+        "mode": {
+          "const": "codex_exec"
+        },
+        "sandbox": {
+          "enum": [
+            "read-only",
+            "workspace-write",
+            "danger-full-access"
+          ]
+        },
+        "ask_for_approval": {
+          "enum": [
+            "untrusted",
+            "on-request",
+            "never"
+          ]
+        }
+      }
+    },
+    "policy": {
+      "type": "object"
+    },
+    "operator_approval": {
+      "type": "object"
+    }
+  }
+}

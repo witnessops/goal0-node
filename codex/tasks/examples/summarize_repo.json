@@ -1,0 +1,37 @@
+{
+  "schema": "vaultsovereign.codex.task_bundle.v1",
+  "task_id": "codex_task_summarize_repo_001",
+  "target_repo": {
+    "name": "witnessops-node/codex",
+    "path": "/home/ops/witnessops-node/codex",
+    "remote": null,
+    "expected_root_markers": [
+      "bin/codex-seed"
+    ]
+  },
+  "prompt": {
+    "instruction": "Summarize the codex-seed runtime layout, identify the top five risky areas, and do not modify files.",
+    "context": "This is a read-only reconnaissance task for the WitnessOps Codex governance pass."
+  },
+  "execution": {
+    "mode": "codex_exec",
+    "sandbox": "read-only",
+    "ask_for_approval": "never",
+    "json": true,
+    "ephemeral": true,
+    "web_search": false,
+    "model": null,
+    "profile": null,
+    "timeout_seconds": 600
+  },
+  "policy": {
+    "allow_web_search": false,
+    "allow_danger_full_access": false,
+    "intended_effect": "read_only_report"
+  },
+  "operator_approval": {
+    "approved_by": "sovereign",
+    "approved_at": "2026-07-07T01:35:00Z",
+    "intent_hash": "sha256:55dadd39fe332fbdd59e82d94ec4d70d8b1da5436eb8961a6e762c9ab0b3ad6f"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "vaultsovereign.codex.task_bundle.v1",
+  "task_id": "codex_task_safe_patch_001",
+  "target_repo": {
+    "name": "witnessops-node/codex",
+    "path": "/home/ops/witnessops-node/codex",
+    "remote": null,
+    "expected_root_markers": [
+      "bin/codex-seed"
+    ]
+  },
+  "prompt": {
+    "instruction": "Add a short docs note explaining that governance overlays must not store secrets. Run the smallest relevant documentation check only. Do not push changes.",
+    "context": "Patch task. Changes must be small and auditable."
+  },
+  "execution": {
+    "mode": "codex_exec",
+    "sandbox": "workspace-write",
+    "ask_for_approval": "never",
+    "json": true,
+    "ephemeral": true,
+    "web_search": false,
+    "model": null,
+    "profile": null,
+    "timeout_seconds": 900
+  },
+  "policy": {
+    "allow_web_search": false,
+    "allow_danger_full_access": false,
+    "intended_effect": "workspace_patch"
+  },
+  "operator_approval": {
+    "approved_by": "sovereign",
+    "approved_at": "2026-07-07T01:35:00Z",
+    "intent_hash": "sha256:b8003e88740cdb06c4beb16625dd00f64d42dca32e7f89d88876b7d23aa4f9d9"
+  }
+}

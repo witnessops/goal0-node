@@ -1,0 +1,39 @@
+{
+  "schema": "vaultsovereign.codex.exec_policy.v1",
+  "policy_version": "codex_exec_policy.v1",
+  "allowed_sandboxes": [
+    "read-only",
+    "workspace-write"
+  ],
+  "allow_danger_full_access": false,
+  "allowed_approval_modes": [
+    "never",
+    "on-request",
+    "untrusted"
+  ],
+  "deny_flags": [
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--yolo",
+    "--dangerously-bypass-hook-trust"
+  ],
+  "allow_web_search_default": false,
+  "require_operator_approval": true,
+  "require_target_repo_exists": true,
+  "require_expected_root_markers": true,
+  "require_json_output": true,
+  "redact_output_secrets": true,
+  "max_prompt_chars": 12000,
+  "secret_patterns": [
+    "sk-[A-Za-z0-9_-]{20,}",
+    "ghp_[A-Za-z0-9_]{20,}",
+    "github_pat_[A-Za-z0-9_]{20,}",
+    "xox[baprs]-[A-Za-z0-9-]{10,}",
+    "AKIA[0-9A-Z]{16}",
+    "-----BEGIN [A-Z ]*PRIVATE KEY-----"
+  ],
+  "notes": [
+    "Use read-only for audit/summarization tasks.",
+    "Use workspace-write only for explicit patch tasks.",
+    "danger-full-access requires an externally hardened environment and is denied by default."
+  ]
+}
