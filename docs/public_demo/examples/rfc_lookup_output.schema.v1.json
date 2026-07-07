@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "witnessops.rfc_lookup_output.v1",
+  "title": "RFC lookup demo structured output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "winner_rfc",
+    "title",
+    "one_line",
+    "source_urls",
+    "boundary"
+  ],
+  "properties": {
+    "winner_rfc": {
+      "type": "string",
+      "enum": ["2324", "1149", "2549"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "one_line": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "source_urls": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "https://www.rfc-editor.org/info/rfc2324",
+          "https://www.rfc-editor.org/info/rfc1149",
+          "https://www.rfc-editor.org/info/rfc2549"
+        ]
+      }
+    },
+    "boundary": {
+      "type": "string",
+      "const": "cited RFC Editor pages only"
+    }
+  }
+}

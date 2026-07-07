@@ -1,0 +1,11 @@
+{
+  "winner_rfc": "2324",
+  "title": "Hyper Text Coffee Pot Control Protocol",
+  "one_line": "Official HTTP extension for coffee-pot control, including 418 I'm a teapot.",
+  "source_urls": [
+    "https://www.rfc-editor.org/info/rfc2324",
+    "https://www.rfc-editor.org/info/rfc1149",
+    "https://www.rfc-editor.org/info/rfc2549"
+  ],
+  "boundary": "cited RFC Editor pages only"
+}

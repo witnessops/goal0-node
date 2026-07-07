@@ -17,7 +17,7 @@ Maps what goal0-node **can** and **cannot** support as public proof. Use with [G
 | Repo is production authority / public signer | **No** | SECURITY.md, PUBLIC_DEMO.md | Policy |
 | Repo accepts secret ingest | **No** | SECURITY.md | Policy |
 | Autonomous executor | **No** | architecture | Policy |
-| Bounded RFC Editor humor lookup (demo) | **Planned** | RFC_LOOKUP_DEMO.v1 task specimens | Future evidence lane + C+D |
+| Bounded RFC Editor humor lookup (demo) | **Planned** | RFC_LOOKUP_DEMO.v1 + PRELIVE_HARNESS.v1 | Live run lane + C+D; verifier `tools/rfc-lookup-demo-verify.sh` |
 | Unrestricted “find anything funny” web browse | **No** | SECURITY.md, demo boundary | Policy |
 
 ## Status tags (public wording)

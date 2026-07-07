@@ -112,9 +112,11 @@ It does not prove:
 |---|---|
 | Grok requester task specimen | Ready (`validate` passes) |
 | Codex lookup task specimen | Ready (`validate` passes with `web_search`) |
-| Domain allowlist in `codex-seed` policy | **Not yet** — prompt + operator harness bound URLs |
-| Computer-use / isolated browser VM | **Operator harness** — outside repo; document in evidence |
-| Recorded evidence lane | **Not yet** — run pipeline after operator approval |
+| Pre-live harness spec | Ready — [RFC_LOOKUP_PRELIVE_HARNESS.v1.md](RFC_LOOKUP_PRELIVE_HARNESS.v1.md) |
+| Output JSON verifier | Ready — `tools/rfc-lookup-demo-verify.sh` |
+| Domain allowlist in `codex-seed` policy | **Not yet** — harness spec + task prompt until policy patch |
+| Computer-use / isolated browser VM | **Operator harness** — configure per pre-live spec |
+| Recorded evidence lane | **Not yet** — `GOAL0_NODE_PUBLIC_DEMO_RFC_LOOKUP_LIVE_RUN_V1` |
 | Public promotion | **Hold** until receipt + C+D + CI on evidence commit |
 
 **Do not** let the model choose arbitrary humor sources. **Do** keep RFC numbers and URLs in the task body so intent hash binds the lookup set.
@@ -140,6 +142,7 @@ codex/bin/codex-seed validate --task "$CODEX_TASK" --out "$EVID/codex_verdict.js
 
 ## Related
 
+- [RFC_LOOKUP_PRELIVE_HARNESS.v1.md](RFC_LOOKUP_PRELIVE_HARNESS.v1.md) — harness boundary, evidence format, verifier checklist
 - [CLAIM_MATRIX.v1.md](CLAIM_MATRIX.v1.md)
 - [operators.md](../operators.md#promotion-checklist)
 - [SECURITY.md](../../SECURITY.md)

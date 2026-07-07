@@ -95,6 +95,8 @@ See [SECURITY.md](../SECURITY.md). Report sensitive issues through private maint
 | [public_demo/GOLDEN_VERIFY_TRANSCRIPT.v1.txt](public_demo/GOLDEN_VERIFY_TRANSCRIPT.v1.txt) | Expected pass output |
 | [public_demo/KNOWN_BAD_VERIFY_TRANSCRIPT.v1.txt](public_demo/KNOWN_BAD_VERIFY_TRANSCRIPT.v1.txt) | Tamper / overclaim failures |
 | [public_demo/CLAIM_MATRIX.v1.md](public_demo/CLAIM_MATRIX.v1.md) | What public proof can and cannot claim |
+| [public_demo/RFC_LOOKUP_DEMO.v1.md](public_demo/RFC_LOOKUP_DEMO.v1.md) | Bounded dual-agent RFC humor demo (design + task specimens) |
+| [public_demo/RFC_LOOKUP_PRELIVE_HARNESS.v1.md](public_demo/RFC_LOOKUP_PRELIVE_HARNESS.v1.md) | Pre-live browser harness spec + output verifier (no live browse) |
 
 **Lane:** `GOAL0_NODE_PUBLIC_DEMO_EVIDENCE_PROMOTION_V1` (docs-only; no signing key or live secret changes).
 
