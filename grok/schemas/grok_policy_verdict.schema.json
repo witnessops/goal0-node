@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/grok_policy_verdict.v1.json",
+  "title": "VaultSovereign Grok Policy Verdict v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "decision",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.grok.policy_verdict.v1"
+    },
+    "decision": {
+      "enum": [
+        "allow",
+        "deny"
+      ]
+    }
+  }
+}

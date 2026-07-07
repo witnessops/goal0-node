@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/grok_run_plan.v1.json",
+  "title": "VaultSovereign Grok Run Plan v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "argv",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.grok.run_plan.v1"
+    }
+  }
+}

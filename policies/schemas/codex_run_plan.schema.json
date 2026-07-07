@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/codex_run_plan.v1.json",
+  "title": "VaultSovereign Codex Run Plan v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "argv",
+    "lineage",
+    "redactions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.codex.run_plan.v1"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "argv": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lineage": {
+      "type": "object"
+    },
+    "redactions": {
+      "type": "array"
+    }
+  }
+}

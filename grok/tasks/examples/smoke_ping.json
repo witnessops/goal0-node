@@ -1,0 +1,32 @@
+{
+  "schema": "vaultsovereign.grok.task_bundle.v1",
+  "task_id": "grok_task_smoke_ping_001",
+  "target_repo": {
+    "name": "witnessops-node",
+    "path": "/home/ops/witnessops-node",
+    "remote": null,
+    "expected_root_markers": []
+  },
+  "prompt": {
+    "instruction": "Reply with exactly: GROK_SEED_LIVE_OK",
+    "context": "Smoke test for governed grok-seed live execution."
+  },
+  "execution": {
+    "mode": "grok_headless",
+    "output_format": "json",
+    "sandbox": "strict",
+    "disable_web_search": true,
+    "model": "grok-composer-2.5-fast",
+    "max_turns": 1,
+    "timeout_seconds": 120
+  },
+  "policy": {
+    "allow_web_search": false,
+    "intended_effect": "read_only_report"
+  },
+  "operator_approval": {
+    "approved_by": "sovereign",
+    "approved_at": "2026-07-07T01:35:00Z",
+    "intent_hash": "sha256:e65e564b25afc3d51a0ac0944c0f94d8f0a245001bfe50cd3bf279ddc0a15985"
+  }
+}

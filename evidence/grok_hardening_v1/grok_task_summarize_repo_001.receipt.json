@@ -1,0 +1,40 @@
+{
+  "schema": "vaultsovereign.grok.receipt.v1",
+  "receipt_id": "rcpt_grok_47e7bc29cdfa9737",
+  "issued_at": "2026-07-07T00:37:57Z",
+  "claim": {
+    "type": "grok_task_policy_checked_and_execution_evidence_recorded",
+    "boundary": "This receipt does not prove correctness, merge, deployment, or absence of defects.",
+    "task_id": "grok_task_summarize_repo_001",
+    "transport": "grok_cli",
+    "return_code": 0
+  },
+  "authority": {
+    "operator": "sovereign",
+    "operator_intent_hash": "sha256:3aaab93263f2939eb9a76a46c562338c93a1ba208cbf3545e05ea705c7e383bf",
+    "operator_intent_expected": "sha256:3aaab93263f2939eb9a76a46c562338c93a1ba208cbf3545e05ea705c7e383bf",
+    "policy_verdict_hash": "sha256:0d43a9ff210c9205d920076dedbcbc75489fb955293c583cf938588d9e836c9e"
+  },
+  "evidence": {
+    "task_hash": "sha256:76b1f76d7ccd10060df9726c3c494aa9069a04bfa64879e869af03ed968bac9a",
+    "policy_verdict_hash": "sha256:0d43a9ff210c9205d920076dedbcbc75489fb955293c583cf938588d9e836c9e",
+    "run_plan_hash": "sha256:6011b9ebf9af3081e30dd74aa5eb0bd1aa6d90807bf0f27d8414ef425f31387e",
+    "execution_evidence_hash": "sha256:47e7bc29cdfa9737d3d76b72173b832471e5d53221e7eadf0efaaa2b5b94813e"
+  },
+  "evidence_paths": {
+    "task": "/home/ops/witnessops-node/evidence/grok_hardening_v1/grok_task_summarize_repo_001.task.json",
+    "policy_verdict": "/home/ops/witnessops-node/evidence/grok_hardening_v1/grok_task_summarize_repo_001.verdict.json",
+    "run_plan": "/home/ops/witnessops-node/evidence/grok_hardening_v1/grok_task_summarize_repo_001.plan.json",
+    "execution_evidence": "/home/ops/witnessops-node/evidence/grok_hardening_v1/grok_task_summarize_repo_001.evidence.json"
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "public_key_id": "debian-codex-node-ed25519-v1",
+    "public_key_path": "/home/ops/witnessops-node/identity/public/node_ed25519.pub.pem",
+    "public_key_pem": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO+JV9/MX/82xdiu2O3fsDYXY0ur/pzrnwBqJZY4n+f debian-codex-node-ed25519-v1\n",
+    "signature_encoding": "base64",
+    "signature": "o/aTplwOIEuJhIGgINAlOn07PmEbrV/gbnVxQm2eQAEghZVcqy9Tgy2e+lhVi/B9ATXIqj5urA8yDrTfHJwtAg==",
+    "signed_payload_hash": "sha256:b698e3f4cfde003bfd618bda39b2fd95a80df7f1ba7ff5f4fc43617e0c87b89e"
+  },
+  "receipt_hash": "sha256:bc6570bd9a6646c9df9b6e78dcda845372d9eae608b41405f958126716bc88bd"
+}

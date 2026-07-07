@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/grok_execution_evidence.v1.json",
+  "title": "VaultSovereign Grok Execution Evidence v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "transport",
+    "return_code",
+    "stdout",
+    "stderr",
+    "started_at",
+    "finished_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.grok.execution_evidence.v1"
+    },
+    "transport": {
+      "enum": [
+        "dry_run",
+        "grok_cli"
+      ]
+    },
+    "return_code": {
+      "type": "integer"
+    }
+  }
+}

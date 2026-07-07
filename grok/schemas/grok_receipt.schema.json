@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/grok_receipt.v1.json",
+  "title": "VaultSovereign Grok Receipt v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "receipt_id",
+    "claim",
+    "evidence"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.grok.receipt.v1"
+    }
+  }
+}

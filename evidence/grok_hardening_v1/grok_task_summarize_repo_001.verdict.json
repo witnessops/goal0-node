@@ -1,0 +1,98 @@
+{
+  "schema": "vaultsovereign.grok.policy_verdict.v1",
+  "task_id": "grok_task_summarize_repo_001",
+  "policy_version": "grok_exec_policy.v1",
+  "decision": "allow",
+  "checked_at": "2026-07-07T00:36:54Z",
+  "checks": [
+    {
+      "id": "schema",
+      "result": "pass"
+    },
+    {
+      "id": "mode_grok_headless",
+      "result": "pass"
+    },
+    {
+      "id": "prompt_present",
+      "result": "pass"
+    },
+    {
+      "id": "prompt_size",
+      "result": "pass",
+      "detail": "chars=180 max=12000"
+    },
+    {
+      "id": "operator_approval_present",
+      "result": "pass"
+    },
+    {
+      "id": "operator_intent_bound",
+      "result": "pass",
+      "detail": "expected=sha256:3aaab93263f2939eb9a76a46c562338c93a1ba208cbf3545e05ea705c7e383bf"
+    },
+    {
+      "id": "output_format_allowed",
+      "result": "pass",
+      "detail": "output_format='json'"
+    },
+    {
+      "id": "json_output_required",
+      "result": "pass"
+    },
+    {
+      "id": "sandbox_allowed",
+      "result": "pass"
+    },
+    {
+      "id": "max_turns_allowed",
+      "result": "pass",
+      "detail": "max_turns=10 cap=25"
+    },
+    {
+      "id": "dangerous_flags_absent",
+      "result": "pass",
+      "detail": "found=[]"
+    },
+    {
+      "id": "deny_tools_not_unblocked",
+      "result": "pass",
+      "detail": "found=[]"
+    },
+    {
+      "id": "allowed_tools_policy",
+      "result": "pass",
+      "detail": "unknown=[]"
+    },
+    {
+      "id": "allowed_tools_safe",
+      "result": "pass",
+      "detail": "found=[]"
+    },
+    {
+      "id": "web_search_policy",
+      "result": "pass"
+    },
+    {
+      "id": "secrets_absent",
+      "result": "pass",
+      "detail": "matched_patterns=[]"
+    },
+    {
+      "id": "target_repo_path_shape",
+      "result": "pass"
+    },
+    {
+      "id": "target_repo_exists",
+      "result": "pass",
+      "detail": "path=/home/ops/witnessops-node/grok"
+    },
+    {
+      "id": "expected_root_markers_present",
+      "result": "pass",
+      "detail": "missing=[]"
+    }
+  ],
+  "task_hash": "sha256:76b1f76d7ccd10060df9726c3c494aa9069a04bfa64879e869af03ed968bac9a",
+  "verdict_hash": "sha256:4b28a931ba7cb5d74cce9ab4d1dc6c0ac1280bb5e14a56dc8236385139e13799"
+}

@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import base64
+import json
+import sys
+from pathlib import Path
+
+TOOLS_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(TOOLS_DIR))
+
+from wop_lib import (  # noqa: E402
+    DEFAULT_PRIVATE_KEY,
+    DEFAULT_PUBLIC_KEY,
+    fingerprint_public_key,
+    hashref_bytes,
+    load_ed25519_private_key,
+    signing_payload_bytes,
+)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Sign a WitnessOps receipt with an Ed25519 node private key.")
+    parser.add_argument("--private-key", type=Path, default=DEFAULT_PRIVATE_KEY)
+    parser.add_argument("--public-key", type=Path, default=DEFAULT_PUBLIC_KEY)
+    parser.add_argument("--public-key-id", default="debian-codex-node-ed25519-v1")
+    parser.add_argument("--in-place", action="store_true")
+    parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("receipt", type=Path)
+    args = parser.parse_args()
+
+    if not args.private_key.exists():
+        print("KEY_ABSENT\tprivate_key_missing", file=sys.stderr)
+        print(f"expected_private_key={args.private_key}", file=sys.stderr)
+        return 3
+
+    try:
+        receipt_obj = json.loads(args.receipt.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"ERROR\t{exc}", file=sys.stderr)
+        return 1
+
+    if not isinstance(receipt_obj, dict):
+        print("ERROR\treceipt_must_be_json_object", file=sys.stderr)
+        return 1
+
+    signature = receipt_obj.get("signature", {})
+    if isinstance(signature, dict) and signature.get("algorithm") == "ed25519" and not args.force:
+        print("ERROR\talready_signed_use_force", file=sys.stderr)
+        return 1
+
+    try:
+        signing_key = load_ed25519_private_key(args.private_key)
+        payload = signing_payload_bytes(receipt_obj)
+        signed = signing_key.sign(payload)
+        signature_bytes = signed.signature
+        public_key_path = str(args.public_key)
+        fingerprint = fingerprint_public_key(args.public_key) if args.public_key.exists() else "SHA256:UNKNOWN"
+
+        receipt_obj["signature"] = {
+            "algorithm": "ed25519",
+            "public_key_id": args.public_key_id,
+            "public_key_fingerprint": fingerprint,
+            "public_key_path": public_key_path,
+            "signature_encoding": "base64",
+            "signature": base64.b64encode(signature_bytes).decode("ascii"),
+            "signed_payload_hash": hashref_bytes(payload),
+        }
+    except Exception as exc:  # noqa: BLE001
+        print(f"ERROR\t{exc}", file=sys.stderr)
+        return 1
+
+    output_path = args.receipt if args.in_place or args.output is None else args.output
+    if args.in_place:
+        output_path = args.receipt
+    elif args.output is not None:
+        output_path = args.output
+    else:
+        output_path = args.receipt
+
+    output_path.write_text(json.dumps(receipt_obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"SIGNED\t{output_path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -11,3 +11,4 @@ private/
 # Runtime evidence (baseline lanes are tracked explicitly)
 evidence/*
 !evidence/codex_hardening_v1/
+!evidence/grok_hardening_v1/

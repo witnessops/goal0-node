@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+TOOLS_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(TOOLS_DIR))
+
+from wop_lib import load_ed25519_public_key  # noqa: E402
+
+
+def emit(check: str, result: str, detail: str) -> bool:
+    print(f"{check}\t{result}\t{detail}")
+    return result == "PASS"
+
+
+def verify_sidecar(receipt_path: Path, sidecar_path: Path) -> bool:
+    observed = hashlib.sha256(receipt_path.read_bytes()).hexdigest()
+    sidecar_text = sidecar_path.read_text(encoding="utf-8").strip().split()
+    if len(sidecar_text) < 1:
+        return emit("sidecar_sha256", "FAIL", "empty_sidecar")
+    expected = sidecar_text[0]
+    if observed == expected:
+        return emit("sidecar_sha256", "PASS", f"observed={observed}")
+    return emit("sidecar_sha256", "FAIL", f"observed={observed} expected={expected}")
+
+
+def verify_signature(receipt_obj: dict, receipt_path: Path, verify_signature: bool) -> bool:
+    signature = receipt_obj.get("signature")
+    if not isinstance(signature, dict):
+        return emit("signature_object", "FAIL", "missing_or_invalid")
+
+    algorithm = signature.get("algorithm")
+    if algorithm == "unsigned":
+        return emit("signature_algorithm", "PASS", "UNSIGNED_OK")
+
+    if algorithm != "ed25519":
+        return emit("signature_algorithm", "FAIL", f"unsupported:{algorithm}")
+
+    required = ("signature", "signed_payload_hash", "signature_encoding")
+    for key in required:
+        if key not in signature:
+            return emit("signature_fields", "FAIL", f"missing:{key}")
+
+    if not verify_signature:
+        return emit("signature_structure", "PASS", "ed25519_structural_only")
+
+    public_key_path = signature.get("public_key_path")
+    if not public_key_path:
+        return emit("signature_verify", "FAIL", "missing_public_key_path")
+
+    try:
+        from wop_lib import signing_payload_bytes
+
+        verify_key = load_ed25519_public_key(Path(public_key_path))
+        payload = signing_payload_bytes(receipt_obj)
+        import base64
+        from nacl.exceptions import BadSignatureError
+
+        sig = base64.b64decode(signature["signature"])
+        verify_key.verify(payload, sig)
+        expected_hash = signature.get("signed_payload_hash", "")
+        observed_hash = "sha256:" + hashlib.sha256(payload).hexdigest()
+        if expected_hash and expected_hash != observed_hash:
+            return emit("signed_payload_hash", "FAIL", f"observed={observed_hash} expected={expected_hash}")
+        return emit("signature_verify", "PASS", str(receipt_path))
+    except Exception as exc:  # noqa: BLE001
+        return emit("signature_verify", "FAIL", str(exc))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate WitnessOps receipt JSON structure and optional sidecar.")
+    parser.add_argument("--sidecar", type=Path, default=None)
+    parser.add_argument("--require-schema", default=None)
+    parser.add_argument("--verify-signature", action="store_true")
+    parser.add_argument("receipt", type=Path)
+    args = parser.parse_args()
+
+    ok = True
+    try:
+        receipt_obj = json.loads(args.receipt.read_text(encoding="utf-8"))
+        ok &= emit("json_parse", "PASS", "valid_json")
+    except (OSError, json.JSONDecodeError) as exc:
+        emit("json_parse", "FAIL", str(exc))
+        return 1
+
+    if not isinstance(receipt_obj, dict):
+        emit("json_object", "FAIL", "not_object")
+        return 1
+    ok &= emit("json_object", "PASS", "dict")
+
+    required_any = ("receipt_id", "run_id")
+    if not any(key in receipt_obj for key in required_any):
+        ok &= emit("receipt_identity", "FAIL", "missing_receipt_id_or_run_id")
+    else:
+        ok &= emit("receipt_identity", "PASS", "present")
+
+    for key in ("schema", "claim", "evidence", "lineage", "signature"):
+        if key not in receipt_obj:
+            ok &= emit(f"required_key_{key}", "FAIL", "missing")
+        else:
+            ok &= emit(f"required_key_{key}", "PASS", "present")
+
+    if args.require_schema and receipt_obj.get("schema") != args.require_schema:
+        ok &= emit("schema_match", "FAIL", f"observed={receipt_obj.get('schema')}")
+    elif args.require_schema:
+        ok &= emit("schema_match", "PASS", args.require_schema)
+
+    if args.sidecar:
+        ok &= verify_sidecar(args.receipt, args.sidecar)
+
+    ok &= verify_signature(receipt_obj, args.receipt, args.verify_signature)
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+WOPS_ROOT="/home/ops/witnessops-node"
+export PYTHONPATH="${WOPS_ROOT}/grok/src${PYTHONPATH:+:${PYTHONPATH}}"
+export PATH="${HOME}/.grok/bin:${HOME}/.local/bin:/usr/bin:/bin"
+cd "${WOPS_ROOT}"
+exec python3 -m grok_xai_seed.cli "$@"

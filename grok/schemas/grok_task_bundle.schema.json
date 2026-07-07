@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vaultsovereign.local/grok_task_bundle.v1.json",
+  "title": "VaultSovereign Grok Task Bundle v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "task_id",
+    "target_repo",
+    "prompt",
+    "execution",
+    "policy",
+    "operator_approval"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vaultsovereign.grok.task_bundle.v1"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "const": "grok_headless"
+        }
+      }
+    }
+  }
+}

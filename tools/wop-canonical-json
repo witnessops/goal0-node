@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+TOOLS_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(TOOLS_DIR))
+
+from wop_lib import canonical_bytes, hashref_bytes, signing_payload  # noqa: E402
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Emit canonical signing payload for a receipt JSON file.")
+    parser.add_argument("--hash-only", action="store_true")
+    parser.add_argument("receipt", type=Path)
+    args = parser.parse_args()
+
+    try:
+        receipt_obj = json.loads(args.receipt.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"ERROR\t{exc}", file=sys.stderr)
+        return 1
+
+    if not isinstance(receipt_obj, dict):
+        print("ERROR\treceipt_must_be_json_object", file=sys.stderr)
+        return 1
+
+    payload = signing_payload(receipt_obj)
+    data = canonical_bytes(payload)
+    if args.hash_only:
+        print(hashref_bytes(data))
+    else:
+        sys.stdout.buffer.write(data)
+        if not data.endswith(b"\n"):
+            sys.stdout.write("\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

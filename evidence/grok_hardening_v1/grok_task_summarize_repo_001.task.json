@@ -1,0 +1,39 @@
+{
+  "schema": "vaultsovereign.grok.task_bundle.v1",
+  "task_id": "grok_task_summarize_repo_001",
+  "target_repo": {
+    "name": "witnessops-node/grok",
+    "path": "/home/ops/witnessops-node/grok",
+    "remote": null,
+    "expected_root_markers": [
+      "bin/grok-seed"
+    ]
+  },
+  "prompt": {
+    "instruction": "Summarize the grok-seed runtime layout, identify the top five risky areas, and do not modify files.",
+    "context": "This is a read-only reconnaissance task for the WitnessOps Grok governance pass."
+  },
+  "execution": {
+    "mode": "grok_headless",
+    "output_format": "json",
+    "sandbox": "strict",
+    "disable_web_search": true,
+    "model": "grok-composer-2.5-fast",
+    "max_turns": 10,
+    "allowed_tools": [
+      "read_file",
+      "grep",
+      "list_dir"
+    ],
+    "timeout_seconds": 600
+  },
+  "policy": {
+    "allow_web_search": false,
+    "intended_effect": "read_only_report"
+  },
+  "operator_approval": {
+    "approved_by": "sovereign",
+    "approved_at": "2026-07-07T01:35:00Z",
+    "intent_hash": "sha256:3aaab93263f2939eb9a76a46c562338c93a1ba208cbf3545e05ea705c7e383bf"
+  }
+}

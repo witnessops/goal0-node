@@ -1,0 +1,60 @@
+{
+  "schema": "vaultsovereign.grok.run_plan.v1",
+  "task_id": "grok_task_summarize_repo_001",
+  "created_at": "2026-07-07T00:36:54Z",
+  "argv": [
+    "grok",
+    "--output-format",
+    "json",
+    "-m",
+    "grok-composer-2.5-fast",
+    "--cwd",
+    "/home/ops/witnessops-node/grok",
+    "--max-turns",
+    "10",
+    "--sandbox",
+    "strict",
+    "--disable-web-search",
+    "--tools",
+    "read_file,grep,list_dir",
+    "-p",
+    "Summarize the grok-seed runtime layout, identify the top five risky areas, and do not modify files.\n\nContext:\nThis is a read-only reconnaissance task for the WitnessOps Grok governance pass.\n\nGovernance constraints:\n- Do not bypass sandboxing or permission controls.\n- Do not print or persist secrets.\n- Keep claims scoped to observed evidence."
+  ],
+  "guards": {
+    "deny_flags": [
+      "--yolo",
+      "--always-approve"
+    ],
+    "deny_tools": [
+      "Agent"
+    ],
+    "denied_write_tools": [
+      "run_terminal_cmd",
+      "search_replace",
+      "write",
+      "delete_file",
+      "web_search",
+      "web_fetch"
+    ],
+    "require_disable_web_search": true,
+    "sandbox": "strict",
+    "tool_mode": "allowlist",
+    "allowed_tools": [
+      "read_file",
+      "grep",
+      "list_dir"
+    ]
+  },
+  "lineage": {
+    "task_path": "/home/ops/witnessops-node/grok/tasks/examples/summarize_repo.json",
+    "policy_verdict_path": "/home/ops/witnessops-node/evidence/grok_hardening_v1/grok_task_summarize_repo_001.verdict.json",
+    "task_hash": "sha256:76b1f76d7ccd10060df9726c3c494aa9069a04bfa64879e869af03ed968bac9a",
+    "policy_verdict_hash": "sha256:0d43a9ff210c9205d920076dedbcbc75489fb955293c583cf938588d9e836c9e"
+  },
+  "redactions": [
+    "No xAI API key or access token is persisted in the plan.",
+    "Prompt text is persisted by design; policy rejects common secret patterns before rendering."
+  ],
+  "claim_boundary": "Plan only: no Grok execution has occurred.",
+  "plan_hash": "sha256:9acbfbffc92c72c488803c55cdc85765e169d02bbda835677099ecd75b8ce8a8"
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "witnessops.policy_bundle_manifest.v1",
+  "bundle_id": "codex-openai-exec-policy-v1",
+  "node_id": "debian-codex-node",
+  "source_seed_zip": "codex-openai-seed-v1.zip",
+  "source_seed_sha256": "sha256:47055a30f7a82c54d1dc96669b486262cde0d3159186dd8348d0ff4c6549cdc2",
+  "created_at": "2026-07-06T22:38:55Z",
+  "install_root": "/home/ops/witnessops-node/policies",
+  "files": [
+    {
+      "relative_path": "codex_exec_policy.v1.json",
+      "sha256": "sha256:f426a41dc3b4627de2f270ed0525f678f9ab470d5f5fe196040d9da504836f62",
+      "bytes": 991,
+      "source_zip_path": "codex-openai-seed-v1/policies/codex_exec_policy.v1.json"
+    },
+    {
+      "relative_path": "schemas/codex_policy_verdict.schema.json",
+      "sha256": "sha256:df3caa6d9f0c595828f52212c0c161af16ba9c2a41df5430344cdf46636a23c3",
+      "bytes": 652,
+      "source_zip_path": "codex-openai-seed-v1/schemas/codex_policy_verdict.schema.json"
+    },
+    {
+      "relative_path": "schemas/codex_run_plan.schema.json",
+      "sha256": "sha256:f006c39f3400e9fde931ca529b6d8352d81056a8b0bd139b584a7ec791a13c8d",
+      "bytes": 629,
+      "source_zip_path": "codex-openai-seed-v1/schemas/codex_run_plan.schema.json"
+    }
+  ]
+}
