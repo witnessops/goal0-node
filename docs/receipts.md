@@ -39,12 +39,15 @@ Default is **strict** (`--strict`). Use `--allow-partial` only when some artifac
 
 ## Baseline lanes
 
-Tracked baseline evidence in this repo:
+Tracked baseline artifacts in this repo:
 
-| Lane | Executor | Mode |
+| Path | Type | Notes |
 |---|---|---|
-| `evidence/codex_hardening_v1/` | Codex | dry-run |
-| `evidence/grok_hardening_v1/` | Grok | dry-run |
+| `receipts/baseline/genesis_000.json` | Genesis | Signed node bootstrap receipt |
+| `evidence/codex_hardening_v1/` | Executor | Codex dry-run hardening lane |
+| `evidence/grok_hardening_v1/` | Executor | Grok dry-run hardening lane |
+
+Per-run governance receipts under `receipts/<run_id>/` are node-local and gitignored.
 
 Reproduce a baseline:
 

@@ -1,0 +1,29 @@
+{
+  "schema": "witnessops.node_trust_anchor_manifest.v1",
+  "node_id": "debian-codex-node",
+  "node_role": "debian-execution-node",
+  "repo": "VaultSovereign/goal0-node",
+  "created_at": "2026-07-06T22:34:58Z",
+  "updated_at": "2026-07-07T02:15:00Z",
+  "genesis": {
+    "genesis_receipt_path": "receipts/baseline/genesis_000.json",
+    "genesis_receipt_hash": "sha256:350d7a309ed66c6fd608f3a179576133b3b9f0414301d3404150fde2a24c90a5",
+    "declared_output_confinement": "/home/ops/witnessops-node"
+  },
+  "identity": {
+    "key_status": "signed",
+    "algorithm": "ed25519",
+    "public_key_fingerprint": "SHA256:NB0ebCHlmG9husM4i7IWjG7KUnaTgRN1s6haaOzJzuo",
+    "public_key_path": "identity/public/node_ed25519.pub.pem",
+    "private_key_custody": "on_node_ops_0600_local_only"
+  },
+  "policy": {
+    "policy_bundle_id": "goal0-dual-executor-policy-v1",
+    "policy_bundle_manifest": "policies/policy_bundle_manifest.v1.json"
+  },
+  "notes": [
+    "Published manifest uses repo-relative paths for GitHub consumers.",
+    "Private key remains on-node only (identity/private/ is gitignored).",
+    "Node-local governance receipts under receipts/<run_id>/ are not tracked."
+  ]
+}

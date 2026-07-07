@@ -61,17 +61,24 @@ goal0-node/
 ├── bootstrap/              # Consent-first genesis bootstrap
 │   └── genesis.py
 ├── docs/                   # Shared architecture and operator docs
+├── identity/               # Public trust material (private key gitignored)
+├── receipts/baseline/      # Published genesis receipt
 ├── seeds/                  # Seed artifacts (hashed at genesis)
 └── evidence/               # Baseline receipt lanes (not runtime noise)
     ├── codex_hardening_v1/
     └── grok_hardening_v1/
 ```
 
-**Not in this repo** (local node only, gitignored):
+**Tracked trust and baseline material:**
+
+- `identity/public/` — node Ed25519 public key
+- `identity/node_trust_anchor_manifest.v1.json` — published trust anchor (repo-relative paths)
+- `receipts/baseline/genesis_000.json` — signed genesis receipt baseline
+
+**Local node only** (gitignored):
 
 - `identity/private/` — node Ed25519 signing key
-- `bootstrap/` — genesis bootstrap
-- `receipts/` — governance receipt archive
+- `receipts/<run_id>/` — per-run governance receipt archive (except `receipts/baseline/`)
 - Other `evidence/*` lanes from live runs
 
 ## Governed pipeline

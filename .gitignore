@@ -12,3 +12,7 @@ private/
 evidence/*
 !evidence/codex_hardening_v1/
 !evidence/grok_hardening_v1/
+
+# Node-local governance receipts (baseline genesis is tracked)
+receipts/*
+!receipts/baseline/

@@ -44,6 +44,10 @@ After genesis on a Debian execution node:
 | Hashed hostname, username | Raw serial numbers |
 | File hashes under seeds/private/bootstrap | File contents from private/ |
 
+## Published baseline
+
+This repo tracks a signed genesis receipt at `receipts/baseline/genesis_000.json` (plus SHA-256 sidecar). Per-run genesis evidence under `evidence/<run_id>/` remains node-local.
+
 ## Claim boundary
 
 Genesis proves **local starting custody artifact hashes** at bootstrap time. It does not prove device ownership, external execution, or third-party publication.
