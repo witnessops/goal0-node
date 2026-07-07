@@ -29,7 +29,12 @@ def verify_sidecar(receipt_path: Path, sidecar_path: Path) -> bool:
     return emit("sidecar_sha256", "FAIL", f"observed={observed} expected={expected}")
 
 
-def verify_signature(receipt_obj: dict, receipt_path: Path, verify_signature: bool) -> bool:
+def verify_signature(
+    receipt_obj: dict,
+    receipt_path: Path,
+    verify_signature: bool,
+    public_key_override: Path | None = None,
+) -> bool:
     signature = receipt_obj.get("signature")
     if not isinstance(signature, dict):
         return emit("signature_object", "FAIL", "missing_or_invalid")
@@ -49,14 +54,17 @@ def verify_signature(receipt_obj: dict, receipt_path: Path, verify_signature: bo
     if not verify_signature:
         return emit("signature_structure", "PASS", "ed25519_structural_only")
 
-    public_key_path = signature.get("public_key_path")
-    if not public_key_path:
-        return emit("signature_verify", "FAIL", "missing_public_key_path")
+    public_key_path = public_key_override
+    if public_key_path is None:
+        raw_path = signature.get("public_key_path")
+        if not raw_path:
+            return emit("signature_verify", "FAIL", "missing_public_key_path")
+        public_key_path = Path(raw_path)
 
     try:
         from wop_lib import signing_payload_bytes
 
-        verify_key = load_ed25519_public_key(Path(public_key_path))
+        verify_key = load_ed25519_public_key(public_key_path)
         payload = signing_payload_bytes(receipt_obj)
         import base64
         from nacl.exceptions import BadSignatureError
@@ -77,6 +85,7 @@ def main() -> int:
     parser.add_argument("--sidecar", type=Path, default=None)
     parser.add_argument("--require-schema", default=None)
     parser.add_argument("--verify-signature", action="store_true")
+    parser.add_argument("--public-key", type=Path, default=None)
     parser.add_argument("receipt", type=Path)
     args = parser.parse_args()
 
@@ -113,7 +122,12 @@ def main() -> int:
     if args.sidecar:
         ok &= verify_sidecar(args.receipt, args.sidecar)
 
-    ok &= verify_signature(receipt_obj, args.receipt, args.verify_signature)
+    ok &= verify_signature(
+        receipt_obj,
+        args.receipt,
+        args.verify_signature,
+        public_key_override=args.public_key,
+    )
     return 0 if ok else 1
 
 
