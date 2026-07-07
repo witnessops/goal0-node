@@ -5,8 +5,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${ROOT}"
 
+export WOPS_ROOT="${WOPS_ROOT:-${ROOT}}"
 export PATH="${HOME}/.grok/bin:${HOME}/.local/bin:${ROOT}/codex/bin:${ROOT}/grok/bin:/usr/bin:/bin"
-export PYTHONPATH="${ROOT}/codex/src:${ROOT}/grok/src${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="${ROOT}/tools:${ROOT}/codex/src:${ROOT}/grok/src${PYTHONPATH:+:${PYTHONPATH}}"
+PYTHON="${PYTHON:-python3}"
 
 CODEX_RECEIPT="evidence/codex_hardening_v1/receipt.json"
 GROK_RECEIPT="evidence/grok_hardening_v1/grok_task_summarize_repo_001.receipt.json"
@@ -40,13 +42,13 @@ echo "baseline-regression: ${ROOT}"
 echo "running 4 baseline verifiers (operators.md checklist F)"
 
 run_step "codex-seed verify --strict" \
-  python3 -m codex_openai_seed.cli verify \
+  "${PYTHON}" -m codex_openai_seed.cli verify \
     --receipt "${CODEX_RECEIPT}" \
     --public-key "${NODE_PUB_KEY}" \
     --strict
 
 run_step "grok-seed verify --strict" \
-  python3 -m grok_xai_seed.cli verify \
+  "${PYTHON}" -m grok_xai_seed.cli verify \
     --receipt "${GROK_RECEIPT}" \
     --task "${GROK_TASK}" \
     --verdict "${GROK_VERDICT}" \

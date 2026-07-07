@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -14,7 +15,16 @@ from .runner import execute_bound_plan
 
 app = typer.Typer(no_args_is_help=True, help="Governed OpenAI Codex CLI overlay.")
 console = Console()
-WOPS_ROOT = Path("/home/ops/witnessops-node")
+
+
+def _repo_root() -> Path:
+    root = os.environ.get("WOPS_ROOT")
+    if root:
+        return Path(root)
+    return Path(__file__).resolve().parents[3]
+
+
+WOPS_ROOT = _repo_root()
 DEFAULT_POLICY = WOPS_ROOT / "policies/codex_exec_policy.v1.json"
 DEFAULT_NODE_KEY = WOPS_ROOT / "identity/private/node_ed25519.pem"
 

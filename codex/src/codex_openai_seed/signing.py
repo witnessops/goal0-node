@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -9,7 +10,15 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
-WOPS_TOOLS = Path("/home/ops/witnessops-node/tools")
+
+def _repo_root() -> Path:
+    root = os.environ.get("WOPS_ROOT")
+    if root:
+        return Path(root)
+    return Path(__file__).resolve().parents[3]
+
+
+WOPS_TOOLS = _repo_root() / "tools"
 if str(WOPS_TOOLS) not in sys.path:
     sys.path.insert(0, str(WOPS_TOOLS))
 

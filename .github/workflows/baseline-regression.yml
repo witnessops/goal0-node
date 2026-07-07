@@ -25,4 +25,7 @@ jobs:
           pip install cryptography pynacl pydantic rich typer
 
       - name: Run baseline regression (checklist F)
-        run: tools/baseline-regression.sh
+        env:
+          PYTHON: python
+          WOPS_ROOT: ${{ github.workspace }}
+        run: bash tools/baseline-regression.sh
