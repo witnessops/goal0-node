@@ -48,6 +48,55 @@ Codex and Grok share pipeline shape but differ in policy surface:
 
 Both use `*-seed` CLIs with identical subcommands: `intent-hash`, `validate`, `render`, `run`, `seal`, `verify`.
 
+## Executor schema roots
+
+Policies and artifact schemas are split across two layers:
+
+| Layer | Path | Contents |
+|---|---|---|
+| **Policy bundle** | `policies/` | Exec policies for both lanes; Codex-only shared schemas |
+| **Executor trees** | `codex/schemas/`, `grok/schemas/` | Per-executor artifact schemas (task, plan, evidence, receipt, verifier report) |
+
+`policies/policy_bundle_manifest.v1.json` declares the canonical roots:
+
+```json
+"executor_schema_roots": {
+  "codex": "codex/schemas/",
+  "grok": "grok/schemas/"
+}
+```
+
+### What lives where
+
+**`policies/`** (install root, hashed in bundle manifest):
+
+- `codex_exec_policy.v1.json` — Codex exec policy
+- `grok_exec_policy.v1.json` — Grok exec policy
+- `schemas/codex_policy_verdict.schema.json` — vendored Codex verdict schema
+- `schemas/codex_run_plan.schema.json` — vendored Codex run-plan schema
+
+**`codex/schemas/`** (executor root):
+
+- `codex_task_bundle`, `codex_run_plan`, `codex_policy_verdict`
+- `codex_execution_evidence`, `codex_receipt`, `codex_verifier_report`
+
+**`grok/schemas/`** (executor root):
+
+- `grok_task_bundle`, `grok_run_plan`, `grok_policy_verdict`
+- `grok_execution_evidence`, `grok_receipt`, `grok_verifier_report`
+
+### Why the layout is asymmetric
+
+Codex was the first seed bundle; its policy verdict and run-plan schemas were vendored under `policies/schemas/` at install time. Grok arrived as a second executor with schemas kept self-contained under `grok/schemas/`.
+
+This is intentional:
+
+- **Do not duplicate** Grok schemas into `policies/schemas/`.
+- **Do reference** executor roots explicitly in the policy bundle manifest.
+- **Do treat** `policies/` as the exec-policy install surface, not the sole schema root for both lanes.
+
+When adding a third executor, follow the Grok pattern: policy file in `policies/`, artifact schemas under `<executor>/schemas/`, and register the root in `executor_schema_roots`.
+
 ## Promotion rule
 
 ```
@@ -61,4 +110,4 @@ Use `*-seed verify --strict` for lane-internal checks. Use `wop-receipt-verify` 
 
 - Private signing keys (`identity/private/`)
 - Live-run evidence noise (only baseline lanes are tracked in git)
-- Governance receipt archives (`receipts/` — node-local audit trail)
+- Per-run governance receipt archives (`receipts/<run_id>/` — except `receipts/baseline/`)
