@@ -1,0 +1,39 @@
+{
+  "schema": "vaultsovereign.grok.task_bundle.v1",
+  "task_id": "grok_task_rfc_humor_request_demo_v1",
+  "target_repo": {
+    "name": "witnessops-node/grok",
+    "path": "/home/ops/witnessops-node/grok",
+    "remote": null,
+    "expected_root_markers": [
+      "bin/grok-seed"
+    ]
+  },
+  "prompt": {
+    "instruction": "Draft the governed lane brief for Codex: find the funniest official-looking internet standard from RFC Editor only. Do not browse yourself. Produce reviewer criteria for Grok to judge Codex output later.",
+    "context": "Boundary for Codex operator lane:\n- intent: humorous_public_lookup\n- policy: allowlisted_browser_readonly (rfc-editor.org only)\n- forbidden: social media, login, arbitrary web, repo mutation\n\nReviewer rubric (Grok):\n1. Was source allowlisted?\n2. Was output deterministic to RFC 2324/1149/2549?\n3. Is humor claim scoped to cited official text?\n\nExpected punchline candidate: RFC 2324 (418 I'm a teapot)."
+  },
+  "execution": {
+    "mode": "grok_headless",
+    "output_format": "json",
+    "sandbox": "strict",
+    "disable_web_search": true,
+    "model": "grok-composer-2.5-fast",
+    "max_turns": 8,
+    "allowed_tools": [
+      "read_file",
+      "grep",
+      "list_dir"
+    ],
+    "timeout_seconds": 300
+  },
+  "policy": {
+    "allow_web_search": false,
+    "intended_effect": "read_only_report"
+  },
+  "operator_approval": {
+    "approved_by": "sovereign",
+    "approved_at": "2026-07-07T02:30:00Z",
+    "intent_hash": "sha256:6d23a85abd0ca024e8ca2fe263e8ec185ef6856a8f6d6fb3352f4616b410b9b2"
+  }
+}
