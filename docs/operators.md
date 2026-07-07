@@ -116,3 +116,81 @@ wop-* pass on genesis  →  bootstrap trust anchor intact
 ```
 
 Neither verifier alone proves correctness, merge safety, or deployment authorization.
+
+## Promotion checklist
+
+Use this before treating a governed run as **promoted** (shared upstream, merged, deployed, or cited as proof).
+
+### A. Node trust anchor (one-time / periodic)
+
+- [ ] Genesis baseline verifies:
+  ```bash
+  tools/wop-receipt-verify receipts/baseline/genesis_000.json \
+    --sidecar receipts/baseline/genesis_000.json.sha256 \
+    --require-schema witnessops.genesis_receipt.v1 \
+    --verify-signature
+  tools/wop-verify receipts/baseline/genesis_000.json
+  ```
+- [ ] `identity/public/node_ed25519.pub.pem` matches `identity/node_trust_anchor_manifest.v1.json`
+- [ ] `identity/private/node_ed25519.pem` present on-node only (never committed)
+- [ ] Policy bundle manifest current: `policies/policy_bundle_manifest.v1.json` lists both Codex and Grok policies
+
+### B. Governed run complete (per executor receipt)
+
+- [ ] Pipeline finished: `validate → render → run → seal → verify`
+- [ ] Policy verdict was `allow` before render/run
+- [ ] `run` used bound `--task` and `--verdict`
+- [ ] Matching `*-seed verify --strict` passes (exit 0):
+  ```bash
+  codex/bin/codex-seed verify --receipt <receipt.json> --strict
+  # or
+  grok/bin/grok-seed verify --receipt <receipt.json> --strict
+  ```
+- [ ] Verifier report shows `decision: pass` for: artifact hashes, lineage, operator intent, signature
+
+### C. Authority layer (human)
+
+- [ ] Task bundle `operator_approval` complete (`approved_by`, `approved_at`, `intent_hash`)
+- [ ] `intent_hash` matches `*-seed intent-hash --task` output
+- [ ] Operator understands task `intended_effect` (read-only vs workspace-write)
+- [ ] Goal-0 phone authority recorded separately if promotion crosses device boundary
+
+### D. Evidence review (beyond verify pass)
+
+- [ ] `execution_evidence.return_code` reviewed (0 ≠ success claim, only recorded rc)
+- [ ] Git diff in evidence reviewed if sandbox allowed writes (`git.diff_bytes` / `diff_sha256`)
+- [ ] No secret patterns in stdout/stderr (check `output_handling` if redaction ran)
+- [ ] Claims in stdout are scoped to observed evidence — receipt does not vouch for content truth
+
+### E. Promotion gates (explicit non-goals)
+
+Do **not** promote on verifier pass alone. Still required separately:
+
+- [ ] Code review / second executor pass (if material change)
+- [ ] Tests or CI (if implementation lane)
+- [ ] Merge approval (if landing to main)
+- [ ] Deployment authorization (if leaving the node)
+
+### F. Reproduce repo baselines (regression smoke)
+
+Before citing goal0-node as healthy, all four baseline verifiers should pass:
+
+```bash
+cd /home/ops/witnessops-node
+
+codex/bin/codex-seed verify --receipt evidence/codex_hardening_v1/receipt.json --strict
+grok/bin/grok-seed verify --receipt evidence/grok_hardening_v1/grok_task_summarize_repo_001.receipt.json --strict
+tools/wop-receipt-verify receipts/baseline/genesis_000.json \
+  --sidecar receipts/baseline/genesis_000.json.sha256 \
+  --require-schema witnessops.genesis_receipt.v1 \
+  --verify-signature
+tools/wop-verify receipts/baseline/genesis_000.json
+```
+
+### Promotion outcome
+
+| Result | Meaning |
+|---|---|
+| **Promote** | All applicable A–E checks pass; upstream authority agrees |
+| **Hold** | Verifier pass but D or E incomplete |
+| **Reject** | Any strict verify fails, intent mismatch, or policy was `deny` |
