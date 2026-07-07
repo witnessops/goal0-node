@@ -70,11 +70,49 @@ tools/grok-governed-launch.sh
 
 Interactive sessions are **not** automatically receipt-backed. Post-session verify lanes are a separate governed step.
 
-## External verification
+## Verifier split
+
+Two receipt families, two verifier paths. Full detail: [receipts.md](receipts.md#verifier-split).
+
+| You sealed with | Verify with | Do not use |
+|---|---|---|
+| `codex-seed seal` / `grok-seed seal` | matching `*-seed verify --strict` | `wop-receipt-verify`, `wop-verify` |
+| Genesis bootstrap / `wop-sign` | `wop-receipt-verify`, `wop-verify` | `*-seed verify` |
+
+### After a governed run (executor receipt)
+
+Always verify with the lane that issued the receipt:
 
 ```bash
-tools/wop-receipt-verify <receipt.json> \
-  --task ... --verdict ... --plan ... --run ...
+codex/bin/codex-seed verify --receipt "$EVID/receipt.json" --strict
+# or
+grok/bin/grok-seed verify --receipt "$EVID/receipt.json" --strict
 ```
 
-`wop-verify` checks Ed25519 signatures. `wop-receipt-verify` additionally validates receipt hash bindings.
+This checks artifact hashes, task↔verdict↔plan↔evidence lineage, operator intent, and the Ed25519 signature (executor signing contract).
+
+### Genesis / node bootstrap receipt
+
+For `receipts/baseline/genesis_000.json` only:
+
+```bash
+tools/wop-receipt-verify receipts/baseline/genesis_000.json \
+  --sidecar receipts/baseline/genesis_000.json.sha256 \
+  --require-schema witnessops.genesis_receipt.v1 \
+  --verify-signature
+
+tools/wop-verify receipts/baseline/genesis_000.json
+```
+
+### Why `wop-*` fails on executor receipts
+
+Executor receipts include `receipt_hash` and use `authority` (not `lineage`). `*-seed seal` signs with `receipt_hash` **excluded**; `wop_lib` keeps it in the payload. Genesis receipts have no `receipt_hash`, so `wop-*` tools match genesis only.
+
+### Promotion rule
+
+```
+*-seed verify pass  →  eligible for promotion review
+wop-* pass on genesis  →  bootstrap trust anchor intact
+```
+
+Neither verifier alone proves correctness, merge safety, or deployment authorization.
